@@ -1,0 +1,59 @@
+BCRYPT:
+
+ compareSync compares the 1st argument to the 2nd, return a boolean: true = match, false = no match 
+
+
+
+MIDDLEWARES
+
+~> Set flash messages for the user here, grabbing from the session, allows to set the locals message varable as a local accesbile varable
+//app.use((req,res, next) => {
+    res.locals.message = req.session.message
+    req.session.message = ''
+    next()
+})
+
+set our username to session username and loggedIn
+app.use((req,res,next) => {
+    res.locals.username = req.session.username
+    res.locals.loggedIn = req.session.loggedIn
+    next()
+})
+
+
+
+User Registration ~>
+- I am of the belief they should automatically be logged in after Registration
+
+~>intialize passport, initialize and passport.session() to use passport for sessions
+app.use(passport.initialize())
+app.use(passport.session())
+
+Oauth:
+//for using the google strategy, need to require mongoose-findorcreate to be able to search/create users after reciving google authentication ~> make sure to add as a plugin to our Schema
+
+GOOGLE Oauth
+ -> saving the npm package to use as a passport strategy, next -> configure the secrets
+
+ passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID, 
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET, 
+    callbackURL:'http://localhost:6100/auth/google/stories'
+    },
+    //google sends back an access token allowing us to get the data from the client\, then allows us to access their data for a longer period of time, get their profile:" email, google id,
+    //the findOrCreate is not real mongoose code, is sudo code, can use npm package to make work as is though
+    function(accessToken, refreshToken, profile, cb) {
+        console.log(profile)
+        //the profile will return quite a bit on the user, the main point that we want to save is the id that comes with profile, as we use it to identify them when they next try to login, any created data on our site will be associated to that id
+        User.findOrCreate({ googleId: profile.id}, function(err,user){
+        return cb(err, user)
+        })
+    }
+))
+
+~> registration with oauth google pop up route
+app.get('/auth/google', 
+//make sure there are no callback func's here or wont work
+    //says, passport, use the googleStrategy that was set up earlier to authenitcate the users profile, this enables the pop up for them to be able to log on to their account and asks google to start the authenication process for the user, then takes them below to:app.get('/auth/google/secrets', here we are asking for the user's profile
+    passport.authenticate('google', {scope:['profile']})
+)

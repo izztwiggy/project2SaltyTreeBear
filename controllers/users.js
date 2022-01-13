@@ -6,6 +6,13 @@ const session = require('express-session')
 
 //  '/user/
 
+function numberYears(){
+    const current = new Date()
+    console.log(current.getFullYear())
+    let thisYear = current.getFullYear()
+    return parseInt(thisYear)
+}
+
 //GET : HOME ROUTE 
 router.get('/', async (req,res,next) =>{
    try{
@@ -83,9 +90,11 @@ router.put('/edit', (req,res) => {
         })
 })
 
+//add new child
 router.get('/child/new', (req,res) => {
-    res.render('children/add')
+    res.render('children/add', {numberYears})
 })
+//post new child
 router.post('/', async (req,res,next) => {
     try{
         console.log(req.body)
@@ -94,7 +103,19 @@ router.post('/', async (req,res,next) => {
             if(!req.body.preferredName){
                 req.body.preferredName = req.body.firstName
             }
-            const data = {...req.body, parent: findParent._id}
+            const data = {
+                firstName: req.body.firstName,
+                middleName: req.body.middleName,
+                lastName: req.body.lastName,
+                nickname: req.body.nickname,
+                birthDay: req.body.birthDay,
+                birthMonth:req.body.birthMonth,
+                birthYear: req.body.birthYear,
+                childEmail:req.body.childEmail,
+                profilePicture: req.body.profilePicture,
+                preferredName: req.body.preferredName,
+                parent: findParent._id
+            }
             const createChild = await Child.create(data)
             await createChild.save()
             console.log(createChild)
@@ -105,26 +126,51 @@ router.post('/', async (req,res,next) => {
     }
 })
 
-router.get('/:id/child', (req,res) => {
-    res.render('children/view')
-})
-
-router.put('/:id/child', async(req,res,next) => {
+router.get('/:id/child', async (req,res,next) => {
     try{
-        console.log(req.body)
-        const childToEdit = await Child.findByIdAndUpdate(req.params.id, req.body)
-        if(childToEdit){
-            console.log('updated child')
-            console.log(childToEdit)
-            res.redirect(`/user/${childToEdit._id}/child`)
-        }
+        const child = await Child.findOne({_id:req.params.id})
+        res.render('children/show', {child})
     }catch(err){
         next(err)
     }
 })
 
-router.get('/:id/child/edit', (req,res) => {
-    res.render('children/edit')
+router.put('/:id/child', async(req,res,next) => {
+    try{
+        console.log(req.body)
+        const data = {
+            firstName: req.body.firstName,
+            middleName: req.body.middleName,
+            lastName: req.body.lastName,
+            nickname: req.body.nickname,
+            birthDay: req.body.birthDay,
+            birthMonth:req.body.birthMonth,
+            birthYear: req.body.birthYear,
+            childEmail:req.body.childEmail,
+            profilePicture: req.body.profilePicture,
+            preferredName: req.body.preferredName,
+        }
+        const childToEdit = await Child.findOneAndUpdate({_id:req.params.id}, req.body, {new:true})
+        res.redirect(`/user/${childToEdit._id}/child`)
+    }catch(err){
+        next(err)
+    }
+})
+
+router.get('/:id/edit', async(req,res,next) => {
+    try{
+        const child = await Child.findOne({_id: req.params.id})
+        res.render('children/edit', {child,numberYears})
+    }catch(err){
+        next(err)
+    }
+})
+
+router.delete('/:id ', async (req,res, next) => {
+    const deletedChild = await Child.findByIdAndRemove(req.params.id)
+    if(deletedChild){
+        res.redirect('/user')
+    }
 })
 
 module.exports = router

@@ -10,8 +10,8 @@ const methodOverride = require('method-override')
 const ejsLayouts = require('express-ejs-layouts')
 const session = require('express-session')
 
-// const booksController = require('./controllers/books')
-// const calendarController = require('./controllers/calendars')
+const bookController = require('./controllers/books')
+const calendarController = require('./controllers/calendars')
 const userController = require('./controllers/users')
 const sessionController = require('./controllers/sessions')
 
@@ -53,8 +53,8 @@ const authRequired = (req,res, next) => {
 
 app.use('/session', sessionController)
 app.use('/user', authRequired, userController)
-// app.use('/bookshelf', bookshelvesController)
-// app.use('/calendar', calendarsController)
+app.use('/bookshelf', bookController)
+app.use('/calendar', calendarController)
 
 app.set('port', process.env.PORT || 8000);
 app.listen(app.get('port'), () => {

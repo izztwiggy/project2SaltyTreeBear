@@ -5,8 +5,10 @@ const childSchema = new mongoose.Schema({
     middleName: String,
     lastName: String,
     nickname: {type: String, default: undefined},
-    birthDate: Date,
-    childEmail:{type: String, default: undefined},
+    birthDay: {type:String, required: true},
+    birthMonth:{type:String, required: true},
+    birthYear: {type: String, require:true},
+    childEmail:String,
     profilePicture: {type: String, default: undefined},
     preferredName: {type:String, default: this.firstName},
     parent: [
@@ -14,13 +16,7 @@ const childSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
-    ],
-    profileAdds: {type: [
-        {
-            prompt: String,
-            response: String
-        }
-    ], default: undefined}
+    ]
 })
 
 const Child = mongoose.model('Child', childSchema)

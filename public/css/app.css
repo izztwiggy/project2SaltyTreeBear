@@ -36,15 +36,15 @@ main > .container {
     flex-basis: auto;
     flex: 1;
 }
-.session-in{
+/* .session-in{
     min-height: 55%;
     margin-top: 1rem;
-}
+} */
 .formDiv{
     padding: 2rem;
 }
 .hidden{
-    visibility: hidden;
+    display:none;
 }
 span{
     font-weight: bold;
@@ -61,7 +61,12 @@ fieldset{
     color: red;
 }
 .profilePicImg{
-    max-height: 100px;
-    max-width: 100px;
+    max-height: 500px;
+    max-width: 500px;
+    border-radius: 50%;
+}
+.profilePicUser{
+    max-height: 10rem;
+    max-width: 10rem;
     border-radius: 50%;
 }

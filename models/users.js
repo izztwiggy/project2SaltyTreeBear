@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     profilePicture:{type: String, default: undefined},
     annualEmail:{type: Boolean, default: false},
     partner: {type: Boolean, default: false},
-    partnerEmail: {type: String, default: undefined}
+    partnerEmail: String
 })
 
 const User = mongoose.model('User', userSchema)

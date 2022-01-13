@@ -8,6 +8,7 @@ const childSchema = new mongoose.Schema({
     birthDate: Date,
     childEmail:{type: String, default: undefined},
     profilePicture: {type: String, default: undefined},
+    preferredName: {type:String, default: this.firstName},
     parent: [
         {
             type: mongoose.Schema.Types.ObjectId,

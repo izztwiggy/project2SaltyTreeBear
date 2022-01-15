@@ -60,6 +60,55 @@ fieldset{
 #urgentNote{
     color: red;
 }
+.holyGrail-content{
+    flex:1;
+}
+.holyGrail-nav .holyGrail-aside{
+    flex: 0 0 12em;
+}
+.holyGrail-nav{
+    display: inline-block;
+    order:-1;
+}
+.sticky{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+    margin: 1rem;
+    border: 1px solid black;
+    border-radius: 25%;
+    width: 25%;
+    text-align: center;
+    overflow: hidden;
+}
+.calendar-container{
+    max-height: 100vh;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#calendar-head{
+    margin-top: 3rem;
+    max-height: 100%;
+    min-width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.title{
+    font-weight: bolder;
+}
+.calBtn{
+    border: 1px solid black;
+}
+.tinyAvatar{
+    max-height: 35%;
+    max-width: 35%;
+}
 .profilePicImg{
     max-height: 500px;
     max-width: 500px;
@@ -69,4 +118,21 @@ fieldset{
     max-height: 10rem;
     max-width: 10rem;
     border-radius: 50%;
+}
+.entryBtn{
+    background-color: lightblue;
+}
+
+@media(max-width:450px) {
+    .input-group{
+        display: flex;
+        flex-wrap: wrap;
+        word-wrap: normal;
+        flex-direction: column;
+        width: 100%;
+    }
+    .input-group > input{
+       max-width: 50%;
+    }
+        
 }

@@ -5,9 +5,12 @@ const userSchema = new mongoose.Schema({
     password:{type: String, required: true},
     name: String,
     email: String,
-    profilePicture:{type: String, default: undefined},
+    profilePicture:{
+        url: String, 
+        filename: String
+    },
+    avatar: String,
     annualEmail:{type: Boolean, default: false},
-    partner: {type: Boolean, default: false},
     partnerEmail: String
 })
 

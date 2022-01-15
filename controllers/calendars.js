@@ -4,13 +4,19 @@ const User = require('../models/users')
 const Child = require('../models/children')
 const Calendar = require('../models/calendar')
 const Book = require('../models/books')
+const dayjs = require('dayjs')
 const session = require('express-session')
+
+dayjs().format()
 
 //go to calendar 
 router.get('/', (req,res) => {
     res.render('calendar/index')
 })
 
+router.get('/test', (req,res) => {
+    res.render('calendar/calendar')
+})
 //new post auto set to upload to the same day
 //Get New Posting for today only feature => may put this back into the new route    
 router.get('/quickAdd', (req,res) => {

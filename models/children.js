@@ -9,8 +9,18 @@ const childSchema = new mongoose.Schema({
     birthMonth:{type:String, required: true},
     birthYear: {type: String, require:true},
     childEmail:String,
-    profilePicture: {type: String, default: undefined},
+    profilePicture: {
+        url: String, 
+        filename: String
+    },
+    avatar: String,
     preferredName: {type:String, default: this.firstName},
+    addOns: [
+        {
+            prompt:String,
+            response: String
+        }
+    ],
     parent: [
         {
             type: mongoose.Schema.Types.ObjectId,

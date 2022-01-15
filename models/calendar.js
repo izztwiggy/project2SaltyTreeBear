@@ -4,7 +4,7 @@ const calendarSchema = new mongoose.Schema({
     calStart: Date, 
     entries: [
         {
-            date: String,
+            date: Date,
             body: String
         }
     ],

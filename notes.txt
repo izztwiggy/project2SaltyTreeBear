@@ -1,3 +1,13 @@
+Multer
+calander
+bookshelf timeline and setup api
+
+
+
+
+
+
+
 BCRYPT:
 
  compareSync compares the 1st argument to the 2nd, return a boolean: true = match, false = no match 

@@ -1,11 +1,18 @@
 const express = require('express')
 const router = express.Router()
+const crypto = require('crypto')
 const User = require('../models/users')
 const Child = require('../models/children')
+const Entry = require('../models/entries')
+const _ = require('lodash')
+
 // const session = require('express-session')
+
 const multer = require('multer')
 const {storage} = require('../db/cloudinary')
 const {cloudinary} = require('../db/cloudinary')
+const { DefaultDeserializer } = require('v8')
+const { runInNewContext } = require('vm')
 const upload = multer({storage})
 
 //  '/user/
@@ -21,11 +28,11 @@ function numberYears(){
 router.get('/', async (req,res,next) =>{
    try{
         const currentUser = await User.findOne({username: req.session.username})
-        const userChildren = await Child.find({parent: currentUser._id})
-        if(userChildren){
-            console.log(userChildren)
-            res.render('users/index.ejs', {user:currentUser, children:userChildren})
-        } 
+        const children = await Child.find({parent: currentUser._id})
+        if(children){
+            console.log(children)
+            res.render('users/index.ejs', {user:currentUser, children:children})
+        }
    }catch(err){
        next(err)
    }
@@ -35,26 +42,26 @@ router.get('/', async (req,res,next) =>{
 router.get('/update', (req,res) => {
     res.render('users/setup')
 })
-
-//PUT USER SETUP/EDIT ROUTE POST REGISTERING
+//PUT USER SETUP/EDIT ROUTE POST REGISTERING ***THIS IS NOT THE EDIT ROUTE ONCE PROFILE HAS BEEN CREATED
 router.put('/update',upload.single('profilePicture'), async(req,res,next) => {
     try{
         if(req.body.annualEmail === 'on'){
             req.body.annualEmail = true
+        } else {
+            req.body.annualEmail = false
         }
         let data = {
             name: req.body.name,
             email: req.body.email,
             avatar: req.body.avatar,
-            annualEmail: req.body.annualEmail, 
-            partnerEmail: req.body.partnerEmail
+            partnerEmail: req.body.partnerEmail,
+            annualEmail: req.body.annualEmail
         }
-
         if(req.file){
             data = {...data, profilePicture:{url:req.file.path, filename: req.file.filename}}
         }
         console.log(data)
-        const sessionUser = await User.findOneAndUpdate({username: req.session.username},data, {new:true})
+        const sessionUser = await User.findOneAndUpdate({username: req.session.username}, data, {new:true})
         if(sessionUser){
            console.log(sessionUser)
            res.redirect('/user/child/new')
@@ -63,7 +70,6 @@ router.put('/update',upload.single('profilePicture'), async(req,res,next) => {
         next(err)
     }
 })
-
 //GET USER EDIT ROUTE
 router.get('/edit', async(req,res,next) => {
     try{
@@ -73,15 +79,14 @@ router.get('/edit', async(req,res,next) => {
         next(err)
     }
 })
-
 //PUT USER EDIT ROUTE
 router.put('/edit', upload.single('profilePicture'), async(req,res, next) => {
         try{
-            console.log(req.file)
-            if(req.body.annualEmail === 'on'){
-                req.body.annualEmail = true
+            if(req.body.deleteCurrent){
+                await cloudinary.uploader.destroy(req.body.deleteCurrent)
             }
-            const updateInfo = {
+            req.body.annualEmail = req.body.annualEmail === 'on' ? true : false
+            let updateInfo = {
                 name: req.body.name,
                 email: req.body.email, 
                 avatar: req.body.avatar,
@@ -89,21 +94,32 @@ router.put('/edit', upload.single('profilePicture'), async(req,res, next) => {
                 partnerEmail: req.body.partnerEmail
             }
             if(req.file){
-                updateInfo = {...data, profilePicture:{url:req.file.path, filename: req.file.filename}}
-            }
-            User.findOneAndUpdate({username: req.session.username},updateInfo, {new:true},(err, updatedUser) => {
-                if(err){
-                    console.log(err)
-                    req.session.message = 'Unable to edit, please try again'
-                } else {
-                    console.log(updatedUser)
+                updateInfo = {...updateInfo, profilePicture:{url:req.file.path, filename: req.file.filename}}
+                const updateUser = User.findOneAndUpdate({username: req.session.username},updateInfo, {new:true})
+                res.redirect('/user')
+            } else if(!req.file && req.body.deleteCurrent){
+                let data = {
+                    name: req.body.name,
+                    email: req.body.email, 
+                    avatar: req.body.avatar,
+                    annualEmail: req.body.annualEmail, 
+                    partnerEmail: req.body.partnerEmail,
+                    profilePicture: {
+                        url:'',
+                        filename: ''
+                    }
+                }
+                const updateUser = await User.findOneAndUpdate({username: req.session.username}, data, {new:true})
+                if(updateUser){
                     res.redirect('/user')
                 }
-            })
+            }
         }catch(err){
             next(err)
         }
 })
+
+                                                                                //CHILD ROUTES
 
 //GET NEW CHILD ROUTE
 router.get('/child/new', (req,res) => {
@@ -125,6 +141,7 @@ router.post('/', upload.single('profilePicture'), async(req,res,next) => {
                 firstName: req.body.firstName,
                 middleName: req.body.middleName,
                 lastName: req.body.lastName,
+                suffix: req.body.suffix,
                 nickname: req.body.nickname,
                 birthDay: req.body.birthDay,
                 birthMonth:req.body.birthMonth,
@@ -140,7 +157,11 @@ router.post('/', upload.single('profilePicture'), async(req,res,next) => {
             const createChild = await Child.create(data)
             await createChild.save()
             console.log(createChild)
-            res.redirect('/user')
+            if(createChild){
+                res.redirect('/user')
+            }
+        } else {
+            console.log('couldnt find parent')
         }
     }catch(err){
         next(err)
@@ -151,7 +172,12 @@ router.post('/', upload.single('profilePicture'), async(req,res,next) => {
 router.get('/:id/child', async (req,res,next) => {
     try{
         const child = await Child.findOne({_id:req.params.id})
-        res.render('children/show', {child})
+        if(child){
+            const entries = await Entry.find({child: child._id})
+            if(entries){
+                res.render('children/show', {child, entries})
+            }
+        }
     }catch(err){
         next(err)
     }
@@ -160,9 +186,6 @@ router.get('/:id/child', async (req,res,next) => {
 //PUT EDIT ROUTE
 router.put('/:id/child',upload.single('profilePicture'), async(req,res,next) => {
     try{
-        // console.log(req.body)
-        console.log(req.file)
-        console.log(req.body)
         if(req.body.deleteCurrent){
            await cloudinary.uploader.destroy(req.body.deleteCurrent)
         }
@@ -170,6 +193,7 @@ router.put('/:id/child',upload.single('profilePicture'), async(req,res,next) => 
             firstName: req.body.firstName,
             middleName: req.body.middleName,
             lastName: req.body.lastName,
+            suffix: req.body.suffix,
             nickname: req.body.nickname,
             birthDay: req.body.birthDay,
             birthMonth:req.body.birthMonth,
@@ -180,14 +204,14 @@ router.put('/:id/child',upload.single('profilePicture'), async(req,res,next) => 
         if(req.file){
             data = {...data, profilePicture:{url:req.file.path, filename: req.file.filename}}
         }
-        console.log(data)
-        const childToEdit = await Child.findOneAndUpdate({_id:req.params.id},[{data}, {$push:{addOns: {prompt: req.body.promptChoice, response: req.body.choiceResponse}}}], {new:true})
-        res.redirect(`/user/${childToEdit._id}/child`)
+        let editChild = await Child.findByIdAndUpdate(req.params.id, data, {new:true})
+        if(editChild){
+            res.redirect(`/user/${editChild._id}/child`)
+        }
     }catch(err){
         next(err)
     }
 })
-
 //GET EDIT ROUTE
 router.get('/:id/edit', async(req,res,next) => {
     try{
@@ -198,16 +222,132 @@ router.get('/:id/edit', async(req,res,next) => {
     }
 })
 
-//DELETE ROUTE
-router.delete('/:id ', async (req,res, next) => {
-   try{
-       const deletedChild = await Child.findByIdAndRemove(req.params.id)
-        if(deletedChild){
-            res.redirect('/user')
+                                                                        //CHILD ENTRY ROUTES
+
+//GET NEW profile entry: create own prompt
+router.get('/:id/entry/create', async(req,res,next) => {
+    try{
+        const child = await Child.findOne({_id: req.params.id})
+        if(child){
+            res.render('children/entriesAddCreate', {child})
+        }
+     }catch(err){
+       next(err)
+     }
+})
+
+//GET NEW profile entry: PREMADE PROMPTS
+router.get('/:id/entry/prompts', async(req,res,next) => {
+    try{
+        const child = await Child.findOne({_id: req.params.id})
+        if(child){
+            res.render('children/entriesAddPrompt', {child})
+        }
+     }catch(err){
+       next(err)
+     }
+})
+
+//POST NEW POST
+router.post('/:id/entry', async(req,res,next) => {
+    try{
+        if(!req.body.date){
+            req.body.date = new Date()
+        }
+        const child = await Child.findOne({_id: req.params.id})
+        if(child){
+            const entry = Entry.create({...req.body, child: child._id})
+            res.redirect(`/user/${child._id}/child`)
+        }
+    }catch(err){
+        next(err)
+    }
+})
+
+                                                                                        //CHILD DELETE ROUTE
+//CHILD DELETE ROUTE
+router.delete('/:id/delete', async (req,res, next) => {
+    try{
+        await cloudinary.uploader.destroy(req.body.filename)
+        const entriesToDelete = await Entry.deleteMany({child: req.params.id})
+        console.log(entriesToDelete)
+        if(entriesToDelete){
+            const deletedChild = await Child.findByIdAndDelete(req.params.id)
+            console.log(deletedChild)
+            if(deletedChild){
+                console.log('deleted entries and user')
+                res.redirect('/user')
+            }else {
+                console.log('Couldnt delete the child')
+            }
+        } else {
+            console.log('could not find entries')
         }
     }catch(err){
       next(err)
     }
 })
+
+
+
+//GET Entry SHOW
+router.get('/:id/entry/:entryId', async(req,res,next)=> {
+    try{
+        const child = await Child.findOne({_id: req.params.id})
+        const entry = await Entry.findOne({_id: req.params.entryId})
+        if(entry){
+            let time = entry.date.toDateString()
+            res.render('children/entryView', {child, entry, time})
+        }
+    }catch(err){
+       next(err)
+    }
+})
+
+//GET Edit Entry
+router.get('/:id/entry/:entryId/edit', async(req,res,next)=> {
+    try{
+        const child = await Child.findOne({_id: req.params.id})
+        const entry = await Entry.findOne({_id: req.params.entryId})
+        res.render('children/entriesEdit', {child, entry})
+     }catch(err){
+       next(err)
+     }
+})
+
+
+//PUT Edit Entry 
+router.put('/:id/entry/:entryId', async(req,res,next) => {
+    try{
+        const child = await Child.findOne({_id: req.params.id})
+        if(!req.body.date){
+            req.body.date = new Date()
+        }
+        const entry = await Entry.findByIdAndUpdate(req.params.entryId, req.body, {new:true})
+        if(entry){
+            console.log(entry)
+            res.redirect(`/user/${child._id}/child`)
+        }
+    }catch(err){
+       next(err)
+    }
+})
+
+
+//DELETE ENTRY
+router.delete('/:id/:entryId/delete', async(req,res,next)=> {
+    try{
+        const deleteEntry = await Entry.findByIdAndDelete(req.params.entryId)
+        if(deleteEntry){
+            res.redirect(`/user/${req.params.id}/child`)
+        }
+     }catch(err){
+       next(err)
+     }
+})
+
+
+
+
 
 module.exports = router

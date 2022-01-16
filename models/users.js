@@ -5,13 +5,14 @@ const userSchema = new mongoose.Schema({
     password:{type: String, required: true},
     name: String,
     email: String,
+    annualEmail: Boolean,
+    avatar: String,
+    partnerEmail: String,
+    partnerCode: String,
     profilePicture:{
         url: String, 
         filename: String
-    },
-    avatar: String,
-    annualEmail:{type: Boolean, default: false},
-    partnerEmail: String
+    }
 })
 
 const User = mongoose.model('User', userSchema)

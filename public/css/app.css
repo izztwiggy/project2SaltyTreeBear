@@ -122,6 +122,12 @@ fieldset{
 .entryBtn{
     background-color: lightblue;
 }
+.displayFont{
+    color: rgb(9, 59, 92)
+}
+table{
+    min-width: 100%;
+}
 
 @media(max-width:450px) {
     .input-group{

@@ -1,0 +1,168 @@
+arrayReverseYears [
+  {
+    '0': {
+      _id: new ObjectId("61e5b58f12c64837d20f5ae1"),
+      date: 2022-01-15T00:00:00.000Z,
+      title: 'Adoption Story',
+      body: 'LPO{KJSCFHIJHSIUHILUH IUDHFILUHDSOIH IOSHDIJHGDILFHILUHOIHOIJKSODKOIJOIUOIUOIUOIUOIHILDUHLIDUGLIFUGILUGH',
+      calendar: false,
+      child: new ObjectId("61e5a6a5551d60e52c27c275"),
+      __v: 0
+    },
+    '1': {
+      _id: new ObjectId("61e5a6e6551d60e52c27c27e"),
+      date: 2022-01-17T17:27:02.560Z,
+      title: 'What is one thing about today that you never want to forget about Your Child?',
+      body: 'They are so inquisitive and an avid reader, so kind and thoughtful. An incredible child',
+      calendar: false,
+      child: new ObjectId("61e5a6a5551d60e52c27c275"),
+      __v: 0
+    },
+    key: '2022'
+  },
+  {
+    '0': {
+      _id: new ObjectId("61e5b5ac12c64837d20f5aed"),
+      date: 2021-03-18T00:00:00.000Z,
+      title: 'OPPOPLPLKLPJSDJOHKJGHb',
+      body: 'dfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfhdfgdfgjoijo;jo;jfgbhdfh',
+      calendar: false,
+      child: new ObjectId("61e5a6a5551d60e52c27c275"),
+      __v: 0
+    },
+    key: '2021'
+  },
+  {
+    '0': {
+      _id: new ObjectId("61e5b59a12c64837d20f5ae7"),
+      date: 2013-12-30T00:00:00.000Z,
+      title: 'What is one thing about today that you never want to forget about Your Child?',
+      body: 'zsflsdkjfloskdhfilkjsdhikjhsikdjhiksduhfilusdhf;oihdkasf',
+      calendar: false,
+      child: new ObjectId("61e5a6a5551d60e52c27c275"),
+      __v: 0
+    },
+    key: '2013'
+  }
+]
+
+
+
+
+
+
+   
+<div class="row justify-content-around">
+    <div class="card kiddy col-4">
+      <h3>hello</h3>
+    </div>
+
+    <div id="kiddy" class="card col-4">
+     <h3>hello</h3>
+    </div>
+</div>
+
+
+<% if(children){%>
+   <div class="container children-home">
+        <% children.forEach((child)=> { %>
+
+            <tr>
+                <td><p class="col-md-8 fs-4 displayFont"><span>Preferred Name</span></p></td>
+                <td>
+                <% if(!child.preferredName){ %>
+                    <p class="col-md-8 fs-4 "><%= child.firstName%></p> 
+                <%} else{%>
+                    <p class="col-md-8 fs-4 "><%= child.preferredName%></p>
+                <%}%>
+                </td>
+                <tr>
+                    <td><p class="col-md-8 fs-4 displayFont"><span>Birthday</span></p></td>
+                    <td><p class="col-md-8 fs-4"><%= birthday(child.birthYear,child.birthMonth,child.birthDay)%></p></td>
+                </tr>
+                
+
+
+
+            </tr>
+            <div class="card" style="width: 18rem;">
+                <% if(child.profilePicture.url){ %>
+                    <img src="<%= child.profilePicture.url%>" class="cardPic card-img-top" alt="child avatar background">
+                <% } else if(child.avatar) {%>
+                    <img src="<%= child.avatar%>"  alt="child avatar pic">
+                <% } else { %>
+                    <img src="/css/avatars/storyCatcher-logo.png" alt="storyCatcher">
+                <% }%> 
+                
+                
+                <div class="card-body">
+                    <a class="showChildLink card-title " href="/user/<%= child._id%>/child">
+                        <% if(!child.preferredName){%>
+                            <h3><%= child.firstName %></h3>
+                        <%}else {%>
+                            <h3><%= child.preferredName %></h3>    
+                        <%}%> 
+                    </a>
+                    <p class="card-text">Birthday <%= birthday(child.birthYear,child.birthMonth,child.birthDay)%> </p>
+                </div>
+            </div>
+            <div class="container">
+                <form id="deleteForm" class="hidden" action="/user/<%=child._id%>/delete?_method=DELETE" method="POST">
+                  <input type="hidden" name="filename" value="<%= child.profilePicture.filename%>">
+                  <input class="nav-link deleteSubmit d-block text-end mt-3" type="submit" value="Delete Profile">
+                </form>
+            </div>
+        <% }) %> 
+    </div>
+<% } %> 
+
+
+<!-- <tr>
+    <td>Name</td>
+    <td><p><%= user.name %></p></td>
+</tr>
+<tr>
+    <td><p><span>Username</span></p></td>
+    <td><p><%= user.username %></p></td>
+</tr>
+<% if(user.email){%>
+    <tr>
+    <td><p><span>Email</span></p></td>
+    <td><p><%= user.email %></p></td>
+    </tr>
+<%} %> 
+<tr>
+    <td><p><span>Annul Emails</span></p></td>
+<% if(user.annualEmail){%>
+        <td><p>Subscribed</p></td>
+    </tr>
+<%} else {%>
+        <td><p>Not Subscribed</p></td>
+    </tr>
+<%}%>
+<% if(user.partnerEmail){%>
+    <tr>
+        <td><p><span>Partner Email</span></p></td>
+        <td><p><%= user.partnerEmail %></p></td>
+    </tr>                   
+<% } %>  -->
+<!-- 
+<div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+    <div class="col-6 col-md-3 px-0">
+      <h1 class="display-4 fst-italic">Welcome <%= user.name%></h1>
+      <p class="lead my-3">View, edit, and add acess your Child's profile Here</p>
+      <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+    </div>
+    <div class="col-6 col-md-3 px-0">
+        <% if(user.profilePicture.url){ %>
+            <img class="showPro" src="<%= user.profilePicture.url%>" alt="user Profile Picture" >
+          <%}else if(!user.profilePicture && user.avatar) {%>
+            <img class="showPro" src="<%= user.avatar%>" alt="user avatar">
+          <%}else {%>
+            <img class="showPro" src="/css/avatars/storyCatcher-logo.png" alt="storycatcher logo">
+          <% } %> 
+    </div>
+    <div class="col-6 col-md-3 px-0">
+      <h4>hello</h4>
+    </div>
+</div> -->

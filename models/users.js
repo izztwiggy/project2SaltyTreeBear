@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
     annualEmail: Boolean,
     avatar: String,
     partnerEmail: String,
-    partnerCode: String,
     profilePicture:{
         url: String, 
         filename: String

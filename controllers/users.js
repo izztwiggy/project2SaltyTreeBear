@@ -4,7 +4,9 @@ const crypto = require('crypto')
 const User = require('../models/users')
 const Child = require('../models/children')
 const Entry = require('../models/entries')
+const session = require('express-session')
 const _ = require('lodash')
+
 
 // const session = require('express-session')
 
@@ -13,6 +15,7 @@ const {storage} = require('../db/cloudinary')
 const {cloudinary} = require('../db/cloudinary')
 const { DefaultDeserializer } = require('v8')
 const { runInNewContext } = require('vm')
+const { lte, reverse, groupBy } = require('lodash')
 const upload = multer({storage})
 
 //  '/user/
@@ -24,14 +27,32 @@ function numberYears(){
     return parseInt(thisYear)
 }
 
+function birthday(year,month,day){
+    let birthday = new Date(year,month,day)
+    return birthday.toDateString()
+}
+
+function calculateAge(year, month, day){
+    let today = new Date()   
+    let startDay = new Date(year,month,day)
+    let startCheck = startDay.valueOf()
+    let todayCheck = today.valueOf()
+    const oneDay = (1000 * 60 * 60 * 24)
+    
+    let difference = todayCheck - startCheck
+    return (Math.floor((difference /oneDay)/ 365))
+}
+
+
+
 //GET : HOME ROUTE 
 router.get('/', async (req,res,next) =>{
    try{
         const currentUser = await User.findOne({username: req.session.username})
         const children = await Child.find({parent: currentUser._id})
-        if(children){
+        if(children && currentUser){
             console.log(children)
-            res.render('users/index.ejs', {user:currentUser, children:children})
+            res.render('users/homeUser.ejs', {user:currentUser, children:children, birthday, calculateAge})
         }
    }catch(err){
        next(err)
@@ -95,10 +116,8 @@ router.put('/edit', upload.single('profilePicture'), async(req,res, next) => {
             }
             if(req.file){
                 updateInfo = {...updateInfo, profilePicture:{url:req.file.path, filename: req.file.filename}}
-                const updateUser = User.findOneAndUpdate({username: req.session.username},updateInfo, {new:true})
-                res.redirect('/user')
             } else if(!req.file && req.body.deleteCurrent){
-                let data = {
+                updateInfo = {
                     name: req.body.name,
                     email: req.body.email, 
                     avatar: req.body.avatar,
@@ -109,10 +128,10 @@ router.put('/edit', upload.single('profilePicture'), async(req,res, next) => {
                         filename: ''
                     }
                 }
-                const updateUser = await User.findOneAndUpdate({username: req.session.username}, data, {new:true})
-                if(updateUser){
-                    res.redirect('/user')
-                }
+            }
+            const updateUser = await User.findOneAndUpdate({username: req.session.username}, updateInfo, {new:true})
+            if(updateUser){
+                res.redirect('/user')
             }
         }catch(err){
             next(err)
@@ -128,6 +147,10 @@ router.get('/child/new', (req,res) => {
 //POST NEW CHILD ROUTE
 router.post('/', upload.single('profilePicture'), async(req,res,next) => {
     try{
+        if(!req.body.birthDay || !req.body.birthMonth || !req.body.birthYear){
+            req.session.message = 'Not able to Register, Please enter Child\'s full Date of Birth, MM-DD-YYYY'
+            res.redirect('/user/child/new')
+        }
         console.log(req.file)
         console.log(req.body)
         const findParent = await User.findOne({username: req.session.username})
@@ -175,7 +198,15 @@ router.get('/:id/child', async (req,res,next) => {
         if(child){
             const entries = await Entry.find({child: child._id})
             if(entries){
-                res.render('children/show', {child, entries})
+                let timeLineEntries = _.sortBy(entries, 'date')
+                // console.log(entries)
+                let groupByYear = timeLineEntries.reduce((groupYear, currEntry) => {
+                    const year = currEntry.date.getFullYear()
+                    groupYear[year] = !groupYear[year] ? []: groupYear[year]
+                    groupYear[year].push(currEntry)
+                    return groupYear
+                }, {})              
+                res.render('children/show', {child, entries:timeLineEntries, years:groupByYear, birthday, calculateAge})
             }
         }
     }catch(err){
@@ -186,6 +217,7 @@ router.get('/:id/child', async (req,res,next) => {
 //PUT EDIT ROUTE
 router.put('/:id/child',upload.single('profilePicture'), async(req,res,next) => {
     try{
+        console.log(req.body)
         if(req.body.deleteCurrent){
            await cloudinary.uploader.destroy(req.body.deleteCurrent)
         }
@@ -200,9 +232,28 @@ router.put('/:id/child',upload.single('profilePicture'), async(req,res,next) => 
             birthYear: req.body.birthYear,
             childEmail: req.body.childEmail,
             preferredName: req.body.preferredName,
+            avatar: req.body.avatar
         }  
         if(req.file){
             data = {...data, profilePicture:{url:req.file.path, filename: req.file.filename}}
+        } else if(!req.file && req.body.deleteCurrent){
+            data = {
+                firstName: req.body.firstName,
+                middleName: req.body.middleName,
+                lastName: req.body.lastName,
+                suffix: req.body.suffix,
+                nickname: req.body.nickname,
+                birthDay: req.body.birthDay,
+                birthMonth:req.body.birthMonth,
+                birthYear: req.body.birthYear,
+                childEmail: req.body.childEmail,
+                preferredName: req.body.preferredName,
+                profilePicture:{
+                    url:'',
+                    filename:''
+                }
+            }
+
         }
         let editChild = await Child.findByIdAndUpdate(req.params.id, data, {new:true})
         if(editChild){
@@ -268,21 +319,33 @@ router.post('/:id/entry', async(req,res,next) => {
 //CHILD DELETE ROUTE
 router.delete('/:id/delete', async (req,res, next) => {
     try{
-        await cloudinary.uploader.destroy(req.body.filename)
-        const entriesToDelete = await Entry.deleteMany({child: req.params.id})
-        console.log(entriesToDelete)
-        if(entriesToDelete){
-            const deletedChild = await Child.findByIdAndDelete(req.params.id)
-            console.log(deletedChild)
-            if(deletedChild){
-                console.log('deleted entries and user')
-                res.redirect('/user')
-            }else {
-                console.log('Couldnt delete the child')
-            }
-        } else {
-            console.log('could not find entries')
+        if(req.body.filename){
+            await cloudinary.uploader.destroy(req.body.filename)
         }
+        const entriesToDelete = await Entry.deleteMany({child: req.params.id})
+        const deletedChild = await Child.findByIdAndDelete(req.params.id)
+        res.redirect('/user')
+        // if(entriesToDelete){
+        //     const deletedChild = await Child.findByIdAndDelete(req.params.id)
+        //     if(deletedChild){
+        //         res.redirect('/user')
+        //     }
+        // }
+        //testing
+        // console.log(entriesToDelete)
+        // if(entriesToDelete){
+        //     const deletedChild = await Child.findByIdAndDelete(req.params.id)
+        //     res.redirect('/user')
+        //     // console.log(deletedChild)
+        //     // if(deletedChild){
+        //     //     console.log('deleted entries and user')
+        //     //     res.redirect('/user')
+        //     // }else {
+        //     //     console.log('Couldnt delete the child')
+        //     // }
+        // } else {
+        //     console.log('could not find entries')
+        // }
     }catch(err){
       next(err)
     }
@@ -295,10 +358,8 @@ router.get('/:id/entry/:entryId', async(req,res,next)=> {
     try{
         const child = await Child.findOne({_id: req.params.id})
         const entry = await Entry.findOne({_id: req.params.entryId})
-        if(entry){
-            let time = entry.date.toDateString()
-            res.render('children/entryView', {child, entry, time})
-        }
+        let time = entry.date.toDateString()
+        res.render('children/entryView', {child, entry, time})
     }catch(err){
        next(err)
     }
@@ -319,13 +380,10 @@ router.get('/:id/entry/:entryId/edit', async(req,res,next)=> {
 //PUT Edit Entry 
 router.put('/:id/entry/:entryId', async(req,res,next) => {
     try{
+        req.body.date = !req.body.date ? new Date() : req.body.date
         const child = await Child.findOne({_id: req.params.id})
-        if(!req.body.date){
-            req.body.date = new Date()
-        }
-        const entry = await Entry.findByIdAndUpdate(req.params.entryId, req.body, {new:true})
-        if(entry){
-            console.log(entry)
+        if(child){  
+            const entry = await Entry.findByIdAndUpdate(req.params.entryId, req.body, {new:true})
             res.redirect(`/user/${child._id}/child`)
         }
     }catch(err){
@@ -338,9 +396,7 @@ router.put('/:id/entry/:entryId', async(req,res,next) => {
 router.delete('/:id/:entryId/delete', async(req,res,next)=> {
     try{
         const deleteEntry = await Entry.findByIdAndDelete(req.params.entryId)
-        if(deleteEntry){
-            res.redirect(`/user/${req.params.id}/child`)
-        }
+        res.redirect(`/user/${req.params.id}/child`)
      }catch(err){
        next(err)
      }

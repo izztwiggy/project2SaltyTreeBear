@@ -54,8 +54,8 @@ const authRequired = (req,res, next) => {
 
 app.use('/session', sessionController)
 app.use('/user', authRequired, userController)
-app.use('/bookshelf', bookController)
-app.use('/calendar', calendarController)
+app.use('/books', authRequired, bookController)
+app.use('/calendar', authRequired, calendarController)
 
 app.set('port', process.env.PORT || 8000);
 app.listen(app.get('port'), () => {

@@ -1,12 +1,12 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
+app.set('port', process.env.PORT || 8000);
+
 
 const SESSION_SECRET = process.env.SESSION_SECRET
 
-// const path = require('path')
-// const cors = require('cors')
-// const fs = require('fs')
+
 const methodOverride = require('method-override')
 const ejsLayouts = require('express-ejs-layouts')
 const session = require('express-session')
@@ -57,7 +57,7 @@ app.use('/user', authRequired, userController)
 app.use('/books', authRequired, bookController)
 app.use('/calendar', authRequired, calendarController)
 
-app.set('port', process.env.PORT || 8000);
+
 app.listen(app.get('port'), () => {
-    console.log(`PORT: ${app.get('port')}`)
+    console.log(`port: ${app.get('port')}`)
 })

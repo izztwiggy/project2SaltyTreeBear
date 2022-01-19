@@ -26,7 +26,6 @@ router.post('/register', async(req,res,next) => {
                 req.body.password = hashedPassword
                 req.session.loggedIn = true
                 const createdUser = await User.create(req.body)
-                console.log(createdUser)
                 req.session.username = createdUser.username
                 res.redirect('/user/update')
             }
@@ -51,7 +50,6 @@ router.post('/login', async(req,res,next) => {
             if(validPassword){
                 req.session.username = userToLogin.username
                 req.session.loggedIn = true
-                console.log('Come back to session login post route to change the redirect to calendar/quickadd once route is built')
                 res.redirect('/user')
             } else {
                 req.session.message = 'Invalid Username or Password'

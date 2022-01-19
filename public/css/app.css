@@ -297,7 +297,9 @@ body{
   border-radius: 2px;
   z-index: 3;
 }
-
+.storyBody{
+  overflow-wrap:break-word;
+}
   
 
 .nav-scroller {

@@ -22,13 +22,13 @@ const upload = multer({storage})
 
 function numberYears(){
     const current = new Date()
-    console.log(current.getFullYear())
+    //console.log(current.getFullYear())
     let thisYear = current.getFullYear()
     return parseInt(thisYear)
 }
 
 function birthday(year,month,day){
-    let birthday = new Date(year,month,day)
+    let birthday = new Date(year,month -1,day)
     return birthday.toDateString()
 }
 
@@ -51,7 +51,7 @@ router.get('/', async (req,res,next) =>{
         const currentUser = await User.findOne({username: req.session.username})
         const children = await Child.find({parent: currentUser._id})
         if(children && currentUser){
-            console.log(children)
+          
             res.render('users/homeUser.ejs', {user:currentUser, children:children, birthday, calculateAge})
         }
    }catch(err){
@@ -81,7 +81,7 @@ router.put('/update',upload.single('profilePicture'), async(req,res,next) => {
         if(req.file){
             data = {...data, profilePicture:{url:req.file.path, filename: req.file.filename}}
         }
-        console.log(data)
+   
         const sessionUser = await User.findOneAndUpdate({username: req.session.username}, data, {new:true})
         if(sessionUser){
            

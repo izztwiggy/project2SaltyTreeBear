@@ -16,7 +16,7 @@ const {cloudinary} = require('../db/cloudinary')
 const { DefaultDeserializer } = require('v8')
 const { runInNewContext } = require('vm')
 const { lte, reverse, groupBy } = require('lodash')
-const upload = multer({storage})
+const upload = multer({storage})    
 
 //  '/user/
 

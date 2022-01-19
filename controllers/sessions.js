@@ -50,7 +50,7 @@ router.post('/login', async(req,res,next) => {
             if(validPassword){
                 req.session.username = userToLogin.username
                 req.session.loggedIn = true
-                res.redirect('/user')
+                res.redirect('/calendar/quickAdd')
             } else {
                 req.session.message = 'Invalid Username or Password'
                 res.redirect('/session/login')

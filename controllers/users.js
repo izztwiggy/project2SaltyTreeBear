@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const crypto = require('crypto')
+// const crypto = require('crypto')
 const User = require('../models/users')
 const Child = require('../models/children')
 const Entry = require('../models/entries')
@@ -42,7 +42,35 @@ function calculateAge(year, month, day){
     let difference = todayCheck - startCheck
     return (Math.floor((difference /oneDay)/ 365))
 }
-
+function isLeap(year){
+    if(year % 4 === 0 && year % 100 !== 0){
+    return true
+    } else if(year % 4 === 0 && year % 100 === 0){
+        if(year % 400 !== 0){
+            return false
+        } else {
+            return true
+        }
+    } else {
+        return false
+    }
+}
+function febDays(year){
+    if(isLeap(year)){
+        return 29
+    } else {
+        return 28
+    }
+}
+function validDateCheck(year,month, day){
+    if(month === 2 && day <= febDays(year)){
+        return true
+    } else if( day <= months[month-1].days){
+        return true
+    }else {
+        return false
+    }   
+}
 
 
 //GET : HOME ROUTE 
@@ -149,6 +177,9 @@ router.post('/', upload.single('profilePicture'), async(req,res,next) => {
     try{
         if(!req.body.birthDay || !req.body.birthMonth || !req.body.birthYear){
             req.session.message = 'Not able to Register, Please enter Child\'s full Date of Birth, MM-DD-YYYY'
+            res.redirect('/user/child/new')
+        } else if(validDateCheck(req.body.birthYear, req.body.birthMonth,req.body.birthDay === false)){
+            req.session.message = 'Invalid Birth Date, Please Retry MM-DD-YYYY'
             res.redirect('/user/child/new')
         }
         const findParent = await User.findOne({username: req.session.username})

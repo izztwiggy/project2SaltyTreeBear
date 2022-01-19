@@ -8,6 +8,17 @@ const session = require('express-session')
 const _ = require('lodash')
 
 // 'books'
+function getDate() {
+    const today = new Date()
+
+    const options = {
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long',
+        year: 'numeric'
+    }
+    return today.toLocaleDateString('en-US', options)
+}
 
 //PICK YOUR CHILDS SHELF ROUTE
 router.get('/', async(req,res,next) => {
@@ -24,45 +35,39 @@ router.get('/', async(req,res,next) => {
     }
 })
 
-//ger view
+
+//GET  view
 router.get('/bookshelf/:bookid/view',async (req,res,next) => {
     try{
      const book = await Book.findOne({_id: req.params.bookid})
+    //  const child = await Child.findOne({_id: book.child})
      res.render('books/bookView', {book})
     }catch(err){
         next(err)
     }
  })
 
-//POST create new book
-router.post('/:childId/new', async(req,res,next) => {
-    try{
-       console.log(req.body)
-       const child = await Child.findOne({_id:req.params.childId})
-       if(child){
-            let newStory = await Book.create(
-                {
-                    author: req.body.author,
-                    cover: req.body.cover,
-                    title: req.body.title,
-                    story: req.body.story,
-                    date: new Date(),
-                    child: child._id
-                }
-            )
-            if(newStory){
-                // console.log('new Story')
-                res.redirect(`/books/${child._id}/view`)
-            }
-       }
-    }catch(err){
-        next(err)
-    }
-})
-
-
 //put book
-
+router.put('/bookshelf/:bookId', async(req,res, next) => {
+   
+    try{
+        const bookEdit = {
+                author: req.body.author,
+                cover: req.body.cover,
+                title: req.body.title,
+                story: req.body.story,
+                date: getDate()
+            }
+        
+        const book = await Book.findOneAndUpdate({id: req.params.bookId}, bookEdit, {new:true})
+        // const user = await Book.findOne({_id: book.child})
+        if(book){
+            res.redirect(`/books/bookshelf/${book._id}/view`)
+        }
+   }catch(err){
+       next(err)
+   }
+})
 
 
 router.delete('/:bookId/delete', async(req,res, next) => {
@@ -78,25 +83,10 @@ router.delete('/:bookId/delete', async(req,res, next) => {
 
 
 
-router.put('bookshelf/:bookId', async(req,res, next) => {
-   
-    try{
-        const book = await Book.findOneAndUpdate({_id: req.params.bookid})
-        const user = await Book.findOne({_id: book.child})
-        
-        if(book){
-            res.redirect(`books/${user.id}/view`)
-        }
-   }catch(err){
-       next(err)
-   }
-})
-
-
 //edit book - get
-router.get('/bookshelf/:bookid/edit',async(req,res,next) => {
+router.get('/:bookId/edit',async(req,res,next) => {
     try{
-        const book = await Book.findOne({_id: req.params.bookid})
+        const book = await Book.findOne({_id: req.params.bookId})
         if(book){
             res.render('books/bookEdit', {book})
         }
@@ -104,6 +94,33 @@ router.get('/bookshelf/:bookid/edit',async(req,res,next) => {
         next(err)
     }
 })
+
+//POST create new book
+router.post('/:childId/new', async(req,res,next) => {
+    try{
+       console.log(req.body)
+       const child = await Child.findOne({_id:req.params.childId})
+       if(child){
+            let newStory = await Book.create(
+                {
+                    author: req.body.author,
+                    cover: req.body.cover,
+                    title: req.body.title,
+                    story: req.body.story,
+                    date: getDate(),
+                    child: child._id
+                }
+            )
+            if(newStory){
+                // console.log('new Story')
+                res.redirect(`/books/${child._id}/view`)
+            }
+       }
+    }catch(err){
+        next(err)
+    }
+})
+
 
 
 //GET Write a book
@@ -115,12 +132,6 @@ router.get('/:childId/new', async(req,res,next) => {
          next(err)
      }
 }) 
-
-
-
-
-
-
 
 
 //get childs bookshelf

@@ -301,6 +301,14 @@ body{
   overflow-wrap:break-word;
 }
   
+.bookBodyView{
+  max-height: auto;
+  overflow-wrap:break-word;
+  border-top: 1px solid black ;
+ 
+  padding: 1%;
+}
+
 
 .nav-scroller {
   position: relative;
@@ -356,6 +364,9 @@ body{
   .h-md-250 { height: 250px; }
 }
 
+.userProfilePic img{
+  max-height: 50%;
+}
 
 /*   
    * Blog posts

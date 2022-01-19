@@ -84,7 +84,7 @@ router.put('/update',upload.single('profilePicture'), async(req,res,next) => {
         console.log(data)
         const sessionUser = await User.findOneAndUpdate({username: req.session.username}, data, {new:true})
         if(sessionUser){
-           console.log(sessionUser)
+           
            res.redirect('/user/child/new')
         }
     }catch(err){
@@ -151,15 +151,11 @@ router.post('/', upload.single('profilePicture'), async(req,res,next) => {
             req.session.message = 'Not able to Register, Please enter Child\'s full Date of Birth, MM-DD-YYYY'
             res.redirect('/user/child/new')
         }
-        console.log(req.file)
-        console.log(req.body)
         const findParent = await User.findOne({username: req.session.username})
         if(findParent){
             if(!req.body.preferredName){
                 req.body.preferredName = req.body.firstName
             }
-            // console.log(req.file)
-            // console.log(req.body)
            let data = {
                 firstName: req.body.firstName,
                 middleName: req.body.middleName,
@@ -179,13 +175,10 @@ router.post('/', upload.single('profilePicture'), async(req,res,next) => {
             }
             const createChild = await Child.create(data)
             await createChild.save()
-            console.log(createChild)
             if(createChild){
                 res.redirect('/user')
             }
-        } else {
-            console.log('couldnt find parent')
-        }
+        } 
     }catch(err){
         next(err)
     }
@@ -199,7 +192,7 @@ router.get('/:id/child', async (req,res,next) => {
             const entries = await Entry.find({child: child._id})
             if(entries){
                 let timeLineEntries = _.sortBy(entries, 'date')
-                // console.log(entries)
+               
                 let groupByYear = timeLineEntries.reduce((groupYear, currEntry) => {
                     const year = currEntry.date.getFullYear()
                     groupYear[year] = !groupYear[year] ? []: groupYear[year]
@@ -325,27 +318,6 @@ router.delete('/:id/delete', async (req,res, next) => {
         const entriesToDelete = await Entry.deleteMany({child: req.params.id})
         const deletedChild = await Child.findByIdAndDelete(req.params.id)
         res.redirect('/user')
-        // if(entriesToDelete){
-        //     const deletedChild = await Child.findByIdAndDelete(req.params.id)
-        //     if(deletedChild){
-        //         res.redirect('/user')
-        //     }
-        // }
-        //testing
-        // console.log(entriesToDelete)
-        // if(entriesToDelete){
-        //     const deletedChild = await Child.findByIdAndDelete(req.params.id)
-        //     res.redirect('/user')
-        //     // console.log(deletedChild)
-        //     // if(deletedChild){
-        //     //     console.log('deleted entries and user')
-        //     //     res.redirect('/user')
-        //     // }else {
-        //     //     console.log('Couldnt delete the child')
-        //     // }
-        // } else {
-        //     console.log('could not find entries')
-        // }
     }catch(err){
       next(err)
     }

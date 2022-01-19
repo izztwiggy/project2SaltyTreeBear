@@ -4,11 +4,11 @@ const bcrypt = require('bcrypt')
 const User = require('../models/users')
 
 router.get('/', (req,res) => {
-    res.render('sessions/about')
+    res.render('sessions/about.ejs')
 })
 
 router.get('/register', (req,res) => {
-    res.render('sessions/register')
+    res.render('sessions/register.ejs')
 })
 
 router.post('/register', async(req,res,next) => {
@@ -39,7 +39,7 @@ router.post('/register', async(req,res,next) => {
 })
 
 router.get('/login', (req,res) => {
-    res.render('sessions/login')
+    res.render('sessions/login.ejs')
 })
 
 router.post('/login', async(req,res,next) => {

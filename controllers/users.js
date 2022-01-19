@@ -61,7 +61,7 @@ router.get('/', async (req,res,next) =>{
 
 //GET UPDATE EDIT USER FOR POST REGISTERING ROUTE
 router.get('/update', (req,res) => {
-    res.render('users/setup')
+    res.render('users/setup.ejs')
 })
 //PUT USER SETUP/EDIT ROUTE POST REGISTERING ***THIS IS NOT THE EDIT ROUTE ONCE PROFILE HAS BEEN CREATED
 router.put('/update',upload.single('profilePicture'), async(req,res,next) => {
@@ -142,7 +142,7 @@ router.put('/edit', upload.single('profilePicture'), async(req,res, next) => {
 
 //GET NEW CHILD ROUTE
 router.get('/child/new', (req,res) => {
-    res.render('children/add', {numberYears})
+    res.render('children/add.ejs', {numberYears})
 })
 //POST NEW CHILD ROUTE
 router.post('/', upload.single('profilePicture'), async(req,res,next) => {
@@ -285,7 +285,7 @@ router.get('/:id/entry/prompts', async(req,res,next) => {
     try{
         const child = await Child.findOne({_id: req.params.id})
         if(child){
-            res.render('children/entriesAddPrompt', {child})
+            res.render('children/entriesAddPrompt.ejs', {child})
         }
      }catch(err){
        next(err)

@@ -362,6 +362,7 @@ router.delete('/:id/delete', async (req,res, next) => {
             await cloudinary.uploader.destroy(req.body.filename)
         }
         const entriesToDelete = await Entry.deleteMany({child: req.params.id})
+        const deleteBooks = await Book.deleteMany({child:req.params.id})
         const deletedChild = await Child.findByIdAndDelete(req.params.id)
         res.redirect('/user')
     }catch(err){

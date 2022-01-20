@@ -37,11 +37,13 @@ router.get('/', async(req,res,next) => {
 
 
 //GET  view
-router.get('/bookshelf/:bookid/view',async (req,res,next) => {
+router.get('/bookshelf/:bookId/view',async (req,res,next) => {
     try{
-     const book = await Book.findOne({_id: req.params.bookid})
-    //  const child = await Child.findOne({_id: book.child})
-     res.render('books/bookView', {book})
+     const book = await Book.findOne({_id: req.params.bookId})
+     const child = await Child.findOne({_id: book.child})
+     if(book && child){
+        res.render('books/bookView', {book, child})
+     }
     }catch(err){
         next(err)
     }
@@ -49,18 +51,16 @@ router.get('/bookshelf/:bookid/view',async (req,res,next) => {
 
 //put book
 router.put('/bookshelf/:bookId', async(req,res, next) => {
-   
     try{
         const bookEdit = {
                 author: req.body.author,
                 cover: req.body.cover,
                 title: req.body.title,
                 story: req.body.story,
-                date: getDate()
             }
         
         const book = await Book.findOneAndUpdate({id: req.params.bookId}, bookEdit, {new:true})
-        // const user = await Book.findOne({_id: book.child})
+        book.save()
         if(book){
             res.redirect(`/books/bookshelf/${book._id}/view`)
         }
@@ -73,8 +73,9 @@ router.put('/bookshelf/:bookId', async(req,res, next) => {
 router.delete('/:bookId/delete', async(req,res, next) => {
     try{    
         const deleteBook = await Book.findByIdAndDelete(req.params.bookId)
-        if(deleteBook){
-            res.redirect('/books')
+        const child = await Child.findOne({_id: deleteBook.child})
+        if(child){
+            res.redirect(`/books/${child._id}/view`)
         }
     }catch(err){
         next(err)

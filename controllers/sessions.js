@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const User = require('../models/users')
 
 router.get('/', (req,res) => {
-    res.render('/sessions/about.ejs')
+    res.render('sessions/about.ejs')
 })
 
 router.get('/register', (req,res) => {

@@ -32,6 +32,30 @@ function birthday(year,month,day){
     return birthday.toDateString()
 }
 
+function febDays(year){
+    if(isLeap(year)){
+        return 29
+    } else {
+        return 28
+    }
+}
+
+const months = [
+    {name: 'January', days: 31},
+    {name: 'February'},
+    {name: 'March', days: 31}, 
+    {name: 'April', days: 30}, 
+    {name: 'May', days: 31}, 
+    {name: 'June', days: 30}, 
+    {name:'July',days: 31}, 
+    {name:'August', days: 31}, 
+    {name:'September', days: 30}, 
+    {name:'October', days: 31}, 
+    {name: 'November', days: 30}, 
+    {name: 'December', days: 31}
+]
+
+
 function calculateAge(year, month, day){
     let today = new Date()   
     let startDay = new Date(year,month,day)
@@ -55,13 +79,7 @@ function isLeap(year){
         return false
     }
 }
-function febDays(year){
-    if(isLeap(year)){
-        return 29
-    } else {
-        return 28
-    }
-}
+
 function validDateCheck(year,month, day){
     if(month === 2 && day <= febDays(year)){
         return true
@@ -178,10 +196,7 @@ router.post('/', upload.single('profilePicture'), async(req,res,next) => {
         if(!req.body.birthDay || !req.body.birthMonth || !req.body.birthYear){
             req.session.message = 'Not able to Register, Please enter Child\'s full Date of Birth, MM-DD-YYYY'
             res.redirect('/user/child/new')
-        } else if(validDateCheck(req.body.birthYear, req.body.birthMonth,req.body.birthDay === false)){
-            req.session.message = 'Invalid Birth Date, Please Retry MM-DD-YYYY'
-            res.redirect('/user/child/new')
-        }
+        } 
         const findParent = await User.findOne({username: req.session.username})
         if(findParent){
             if(!req.body.preferredName){
@@ -410,3 +425,9 @@ router.delete('/:id/:entryId/delete', async(req,res,next)=> {
 
 
 module.exports = router
+
+
+// else if(validDateCheck(req.body.birthYear, req.body.birthMonth,req.body.birthDay === false)){
+//     req.session.message = 'Invalid Birth Date, Please Retry MM-DD-YYYY'
+//     res.redirect('/user/child/new')
+// }

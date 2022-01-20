@@ -365,7 +365,7 @@ body{
 }
 
 .userProfilePic img{
-  max-height: 50%;
+  max-height: fill;
 }
 
 /*   

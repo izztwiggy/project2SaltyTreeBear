@@ -8,7 +8,7 @@ router.get('/', (req,res) => {
 })
 
 router.get('/register', (req,res) => {
-    res.render('/sessions/register.ejs')
+    res.render('sessions/register.ejs')
 })
 
 router.post('/register', async(req,res,next) => {
@@ -31,7 +31,7 @@ router.post('/register', async(req,res,next) => {
             }
         } else {
             req.session.message = 'Passwords Must Match'
-            res.redirect('/session/register')
+            res.redirect('session/register')
         }
     }catch(err){
         next(err)
@@ -39,7 +39,7 @@ router.post('/register', async(req,res,next) => {
 })
 
 router.get('/login', (req,res) => {
-    res.render('/sessions/login.ejs')
+    res.render('sessions/login.ejs')
 })
 
 router.post('/login', async(req,res,next) => {

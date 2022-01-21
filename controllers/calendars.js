@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
+
 const User = require('../models/users')
 const Child = require('../models/children')
 const Calendar = require('../models/calendar')
 const Book = require('../models/books')
 const Entry = require('../models/entries')
-const session = require('express-session')
+// const session = require('express-session')
 
 const multer = require('multer')
 const {storage} = require('../db/cloudinary')
@@ -39,9 +40,6 @@ router.get('/quickAdd', async(req,res, next) => {
 })
 
 router.post('/new', async(req,res,next) => {
-    console.log(req.body)
-    console.log(req.file)
-
     try{
         findChild = !req.body.childId ? req.body.childNames: req.body.childId
         const child = await Child.findOne({_id: findChild})

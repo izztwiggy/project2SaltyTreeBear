@@ -1,9 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
-app.set('port', process.env.PORT || 8000);
 
-
+app.set('port', process.env.PORT || 3000);
 const SESSION_SECRET = process.env.SESSION_SECRET
 
 
@@ -16,8 +15,8 @@ const calendarController = require('./controllers/calendars')
 const userController = require('./controllers/users')
 const sessionController = require('./controllers/sessions')
 
-app.use(express.static('public'))
 app.use(methodOverride('_method'))
+app.use(express.static('public'))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 

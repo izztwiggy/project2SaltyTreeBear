@@ -1,7 +1,8 @@
 const express = require('express')
-const router = express.Router()
 const bcrypt = require('bcrypt')
 const User = require('../models/users')
+
+const router = express.Router()
 
 router.get('/', (req,res) => {
     res.render('sessions/about.ejs')
@@ -12,6 +13,7 @@ router.get('/register', (req,res) => {
 })
 
 router.post('/register', async(req,res,next) => {
+    
     try{
         console.log(req.body)
         if(req.body.password === req.body.verifyPassword){
@@ -33,7 +35,8 @@ router.post('/register', async(req,res,next) => {
             req.session.message = 'Passwords Must Match'
             res.redirect('session/register')
         }
-    }catch(err){
+
+    }catch(err){                
         next(err)
     }
 })

@@ -1,11 +1,13 @@
 const express = require('express')
 const router = express.Router()
+const _ = require('lodash')
+
 const User = require('../models/users')
 const Book = require('../models/books')
 const Child = require('../models/children')
 const Entry = require('../models/entries')
-const session = require('express-session')
-const _ = require('lodash')
+// const session = require('express-session')
+
 
 // 'books'
 function getDate() {

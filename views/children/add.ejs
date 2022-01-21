@@ -1,0 +1,113 @@
+<div class="container">
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="/css/avatars/storyCatcher-logo.png" alt="storyCatcher logo" width="200" height="200">
+        <h2>Register Your Child</h2>
+        <p class="lead">Enter Your Child's Information below, This form is for you and your child, fill out however fits for you. The only requirement we need is an identifying name, and their Date of Birth.</p>
+        <p><span>Optional</span> If you choose, we suggest creating an email for your child, Every year on their birthday we will send them all the highlights, milestones, pictures, and inputs entered for that year of their life. The hope is when they are older they will be able to look back and have all those memories of themselves to hold on to, keep, and pass down. This is a completely optional feature!</p> 
+        <p>Create your Child's Email Here <a href="https://www.google.com/gmail/about/" target="_blank"><button class="btn btn-outline-secondary btn-sm">Create New Gmail</button></a></p>
+    </div>
+    <div class="container">
+        <h4>Child's Information:</h4>
+        <form action="/user" method="post" enctype="multipart/form-data">
+            <div class="childAddForm">
+                <fieldset>
+                    <label for="childFirstName">First name</label>
+                    <input class="form-control" type="text" id="firstName" name="firstName" placeholder="First Name">
+                </fieldset>
+                <fieldset>
+                    <label for="middleName">Middle name</label>
+                    <input class="form-control" type="text" id="middleName" name="middleName" placeholder="Middle Name">
+                </fieldset>
+                <fieldset>
+                    <label for="childLastName">Last name</label>
+                    <input class="form-control" type="text" id="lastName" name="lastName" placeholder="Last Name">
+                </fieldset>
+                <fieldset>
+                    <label for="childSuffix">Suffix</label>
+                    <input class="form-control" type="text" id="childSuffix" name="suffix" placeholder="Jr">
+                </fieldset>
+                <fieldset>
+                    <label for="childnickname">Nickname</label>
+                    <input class="form-control" type="text" id="nickname" name="nickname" placeholder="Nickname">
+                </fieldset>
+                <fieldset>
+                    <label for="preferredName">Preferred Name</label>
+                    <input type="text" class="form-control" name="preferredName" placeholder="Preferred Name">
+                </fieldset>
+                <fieldset>
+                    <label for="birthDate">Date of Birth</label>
+                    <input class="form-control" type="number" id="birthDate" name="birthMonth" min="1" max="12" step="1" placeholder="MM">
+                    <input class="form-control" type="number" id="birthDate" name="birthDay" min="1" max="31" step="1" placeholder="DD">
+                    <input class="form-control" type="number" id="birthDate" name="birthYear" min=<%= numberYears() - 100 %> max="<%= numberYears() + 20 %>" step="1" placeholder="YYYY">
+                </fieldset>
+                <fieldset>
+                    <label for="childEmail">Child's Email</label>
+                    <input class="form-control" type="email" id="childEmail" name="childEmail" placeholder="child@email.com">
+                </fieldset>
+                <fieldset>
+                    <label class="form-label" for="profilePicture">Upload Profile Picture</label>
+                    <input class="form-file-input"type="file" name="profilePicture" id="profilePicture" accept="image/*" single>
+                </fieldset>
+                <fieldset >
+                    <label for="avatarChoice">Choose From Avatars:</label>
+                    <select id="avatarChoice" name="avatar" class="selectOption">
+                        <option selected disabled hidden>Select One </option>
+                        <option value="/css/avatars/bee_avatar.jpeg">Bee</option>
+                        <option value="/css/avatars/butterfly_avatar.jpeg">Lion</option>
+                        <option value="/css/avatars/cactus_avatar.jpeg">Cactus</option>
+                        <option value="/css/avatars/deer_avatar.jpeg">Deer</option>
+                        <option value="/css/avatars/flower_avatar.jpeg">Flower</option>
+                        <option value="/css/avatars/fox_avatar.jpeg">Fox</option>
+                        <option value="/css/avatars/horse_avatar.jpeg">Horse</option>
+                        <option value="/css/avatars/mountainLake_avatar.jpeg">Mountain Lake</option>
+                        <option value="/css/avatars/mushroom_avatar.jpeg">Mushrooms</option>
+                        <option value="/css/avatars/orangutan_avatar.jpeg">Orangutan</option>
+                        <option value="/css/avatars/sparkle_web.jpeg">Spider Web</option>
+                        <option value="/css/avatars/tiger_avatar.jpeg">Tiger</option>
+                        <option value="/css/avatars/wolf_avatar.jpeg">Wolf</option>
+                        <option value="/css/avatars2/airplane_avatar.jpeg">Airplane</option>
+                        <option value="/css/avatars2/astronaut_avatar.jpeg">Astronaut</option>
+                        <option value="/css/avatars2/explosion_avatar.jpeg">Space Fire Ball</option>
+                        <option value="/css/avatars2/ghost_avatar.jpeg">Ghost</option>
+                        <option value="/css/avatars2/giddyUp_avatar.jpeg">Yee Haw</option>
+                        <option value="/css/avatars2/giraffe_avatar.jpeg">Giraffe</option>
+                        <option value="/css/avatars2/happyGuy.jpeg">Happy</option>
+                        <option value="/css/avatars2/ladybug.jpeg">LadyBug</option>
+                        <option value="/css/avatars2/matchBoxCar_avatar.jpeg">Match Box Car</option>
+                        <option value="/css/avatars2/motorcycle_avatar.jpeg">MotorCylce</option>
+                        <option value="/css/avatars2/rainbowtings_avatar.jpeg">Magic Rainbow Wall</option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <label for="submitBtn"></label>
+                    <input class="form-control" type="submit" class="btn btn-primary" value="Submit">
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- <script>
+    const uploadField = document.querySelector('.uploadPic')
+    const avatarField = document.querySelector('.avatarPic')
+    const avatarBtn = document.getElementById('avatarBtn')
+    const picUploadBtn = document.getElementById('picUploadBtn')
+
+    const fileUpload = document.querySelector('.fileUpload')
+    const selectOptionAvatar = document.querySelector('.selectOption')
+
+    avatarBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        console.log(e.target)
+        avatarField.classList.toggle('hidden')
+    })
+
+    picUploadBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        console.log(e.target)
+        uploadField.classList.toggle('hidden')
+    })
+
+
+</script> -->

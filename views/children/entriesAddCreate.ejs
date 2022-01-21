@@ -1,0 +1,15 @@
+<a href="/user/<%=child._id%>/child">Back to Child Profile</a>
+<a href="/user/<%=child._id%>/entry/prompts">Choose From Prompts</a>
+ 
+<!-- Create Your Own Prompt -->
+<form action="/user/<%=child._id%>/entry" method="post">
+    <fieldset>
+        <label for="createPrompt">Create Own Prompt</label>
+        <input class="form-control" type="text" name="title" id="createPrompt">
+        <label for="createPromptResponse">Response</label>
+        <textarea class="form-control" name="body" id="createdPromptResponse" cols="30" rows="10"></textarea>
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="Add Entry">
+    </fieldset>
+ </form>

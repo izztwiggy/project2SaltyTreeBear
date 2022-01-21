@@ -1,0 +1,109 @@
+<div class="container-fluid">
+    <h3>Edit Profile</h3>
+    <form action="/user/edit?_method=PUT" method="post" enctype="multipart/form-data">
+        <%if(!user.profilePicture.url){%>
+            <fieldset class="choosePicField">
+                <label class="form-label" for="profilePicture">Upload Profile Picture</label>
+                <input class="form-control-file"type="file" name="profilePicture" id="profilePicture" accept="image/*" single>
+            </fieldset>
+        <%}else {%>
+            <fieldset>
+                <label for="deleteCurrentPic">Remove or Edit Current Profile Picture</label>
+                <input type="checkbox" class="removePic" value="<%= user.profilePicture.filename%>" name="deleteCurrent" id="deleteCurrentPic">
+            </fieldset>
+        <fieldset class="choosePicField hidden">
+            <label class="form-label" for="profilePicture">Upload Profile Picture</label>
+            <input class="form-control-file"type="file" name="profilePicture" id="profilePicture" accept="image/*" single>
+        </fieldset>
+            <%} %> 
+        <fieldset>
+            <label for="avatar">Choose An Avatar</label>
+            <select class="avatarInput" name="avatar" id="avatar">
+                <option selected disabled hidden>Select One </option>
+                <option value="/css/avatars/bee_avatar.jpeg">Bee</option>
+                <option value="/css/avatars/butterfly_avatar.jpeg">Lion</option>
+                <option value="/css/avatars/cactus_avatar.jpeg">Cactus</option>
+                <option value="/css/avatars/deer_avatar.jpeg">Deer</option>
+                <option value="/css/avatars/flower_avatar.jpeg">Flower</option>
+                <option value="/css/avatars/fox_avatar.jpeg">Fox</option>
+                <option value="/css/avatars/horse_avatar.jpeg">Horse</option>
+                <option value="/css/avatars/mountainLake_avatar.jpeg">Mountain Lake</option>
+                <option value="/css/avatars/mushroom_avatar.jpeg">Mushrooms</option>
+                <option value="/css/avatars/orangutan_avatar.jpeg">Orangutan</option>
+                <option value="/css/avatars/sparkle_web.jpeg">Spider Web</option>
+                <option value="/css/avatars/tiger_avatar.jpeg">Tiger</option>
+                <option value="/css/avatars/wolf_avatar.jpeg">Wolf</option>
+                <option value="/css/avatars2/airplane_avatar.jpeg">Airplane</option>
+                <option value="/css/avatars2/astronaut_avatar.jpeg">Astronaut</option>
+                <option value="/css/avatars2/explosion_avatar.jpeg">Space Fire Ball</option>
+                <option value="/css/avatars2/ghost_avatar.jpeg">Ghost</option>
+                <option value="/css/avatars2/giddyUp_avatar.jpeg">Yee Haw</option>
+                <option value="/css/avatars2/giraffe_avatar.jpeg">Giraffe</option>
+                <option value="/css/avatars2/happyGuy.jpeg">Happy</option>
+                <option value="/css/avatars2/ladybug.jpeg">LadyBug</option>
+                <option value="/css/avatars2/matchBoxCar_avatar.jpeg">Match Box Car</option>
+                <option value="/css/avatars2/motorcycle_avatar.jpeg">MotorCylce</option>
+                <option value="/css/avatars2/rainbowtings_avatar.jpeg">Magic Rainbow Wall</option>
+            </select>
+        </fieldset>
+        <fieldset>
+            <label for="name">Name</label>
+            <input class="form-control" name="name" type="text" value="<%= user.name %> ">
+        </fieldset>
+        <fieldset>
+            <label for="email">Email</label>
+            <input class="form-control" name="email" type="email" value="<%= user.email %> ">
+        </fieldset>
+        <fieldset>
+            <label for="partnerEmail">Change Partner Email</label>
+            <input class="form-control" name="partnerEmail" type="email" value="<%= user.partnerEmail %> ">
+        </fieldset>
+        <fieldset>
+            <label for="annualEmail">Recieve Annual Highlights Email</label>
+            <input type="checkbox" name="annualEmail" 
+                <% if(user.annualEmail === true){%>
+                    checked
+                <%} %> 
+            >
+        </fieldset>
+        <fieldset>
+            <input class="form-control" type="submit" value="Submit">
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    const selectPictureField = document.querySelector('.choosePicField')
+    const removePicCheck = document.querySelector('.removePic')
+
+    removePicCheck.addEventListener('change', (e) => {
+        e.preventDefault()
+        selectPictureField.classList.toggle('hidden')
+    })
+
+</script>
+
+<!-- <script>
+    const avatarBtn = document.querySelector('.avatar-btn')
+    const profileBtn = document.querySelector('.file-btn')
+    const avatarInput = document.querySelectorAll('.avatarInput')
+    const profileUpload = document.querySelectorAll('.profileUpload')
+
+    console.log(avatarBtn)
+    console.log('profileBtn', profileBtn)
+    console.log(avatarInput)
+    console.log(profileUpload)
+
+    avatarBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        avatarInput.forEach((field) => {
+            field.classList.toggle('hidden')
+        })
+    })
+    profileBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        profileUpload.forEach((field) => {
+            field.classList.toggle('hidden')
+        })
+    })
+</script> -->

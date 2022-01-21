@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="p-4 p-md-5 mb-4 rounded bg-light">
+        <div class="col-md-6 px-0">
+          <h1 class="display-4 fst-italic">Welcome To Your Child's Bookshelf</h1>
+          <p class="lead my-3">This is where you can come and save all of your child's Current Favorite Books, as well as a place to write down and save, the incredible stories you have made up with your child. Think Bedtime, Play Time, any and all times. We catch the stories now, to share years down the road.</p>
+        </div>
+        <div class="col-md-4 px-0">
+          <p class="lead mb-0"><span>Select a Child To Begin</span></p>
+          <% children.forEach(child => {%>
+              <% if(!child.preferredName){ %>
+                  <a href="/books/<%= child.id%>/view" class="t fw-bold"><%= child.firstName%></a></p>
+                <%} else{%>
+                  <a href="/books/<%= child.id%>/view" class="t fw-bold"><%= child.preferredName%></a></p>
+                <%}%>
+           <%}) %> 
+      </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="container-fluid">
+    <h1>Calendar Quick-Add</h1>
+    <h3><%= date %></h3>
+
+    <form action="/calendar/new" method="post" enctype="multipart/form-data">
+        <% if(children.length > 1){%>
+            <label for="child"><span>Select a Child To Begin</span></label>
+            <select class="form-control" name="childNames" id="child">
+                <% children.forEach(child => {%>
+                    <% if(!child.preferredName){ %>
+                        <option value="<%= child.id %>"><%= child.firstName%></option>
+                      <%} else{%>
+                        <option value="<%= child.id %>"><%= child.preferredName%></option>
+                      <%}%>
+                <%}) %>   
+            </select>
+        <%}else {%>
+            <input type="hidden" name="childId" value="<%= children.id%>">    
+        <%}%> 
+        <fieldset>
+            <label for="upload">Upload A Picture or File</label>
+            <input class="form-control" type="file" name="upload" id="upload" single accept="image/*, pdf">
+            <label for="note">Quick Note</label>
+            <input class="form-control" type="text" name="note" id="note">
+            <label for="story">Entry</label>
+            <textarea class="form-control" name="body" id="createdPromptResponse" cols="30" rows="10"></textarea>
+        </fieldset>
+        <fieldset>
+            <input type="submit" value="Add To Calendar">
+        </fieldset>
+     </form>
+</div>

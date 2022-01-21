@@ -1,0 +1,16 @@
+<div class="container editView">
+    <a class="btn btn-sm btn-outline" href="/books/<%= child.id %>/view">Back</a>
+    <a class="btn btn-sm btn-outline" href="/books/<%= book.id%>/edit">Edit</a>
+    <form action="/books/<%= book.id%>/delete?_method=DELETE" method="post">
+        <input type="submit" value="Delete">
+    </form>
+</div>
+<div class="container-fluid bookBodyView">
+    <h3><%= book.title%></h3>
+    <p><span>By <%= book.author%></span></p>
+    <p>Written <%= book.date %></p>
+</div>
+<div class="container-fluid">
+    <p><%= book.story%></p>
+</div>
+

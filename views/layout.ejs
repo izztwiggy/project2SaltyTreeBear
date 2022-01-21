@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/app.css">
+    <title>Story Catcher</title>
+    <link rel="shortcut icon" href="/css/avatars/storyCatcher-logo.png" type="image/x-icon">
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+            <% if(!loggedIn){ %>
+                <a class="navbar-brand" href="/session">STORY CATCHER</a>
+            <%} else { %>
+          <a class="navbar-brand" href="/user">STORY CATCHER</a>
+          <%}%>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <% if(!loggedIn){ %>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><a href="/session" class="nav-link active">About</a></li>
+                        <li class="nav-item"><a href="/session/login" class="nav-link active">Login</a></li>
+                        <li class="nav-item"><a href="/session/register" class="nav-link active">Register</a> </li>
+                    </ul>
+                <%} else { %>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><a href="/calendar/quickAdd" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="/user" class="nav-link active">Profile</a></li>
+                        <li class="nav-item"><a href="/books" class="nav-link active">Bookshelf</a></li>
+                        <li class="nav-item"><a href="/session/logout" class="nav-link active">Logout</a> </li>
+                    </ul>
+                <% } %> 
+            </ul>
+            <!-- <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form> -->
+          </div>
+        </div>
+    </nav>
+<!-- 
+    <main class="flex-shrink-0">
+        
+    </main> -->
+    <div class="containerBody flex-shrink-0">
+        <% if(message){%>
+            <p class="messageDisplay"><%= message %></p>
+        <%}%>   
+        <%- body %>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <span class="text-muted">Story Catcher 2022</span>
+        <!-- <div class=" container footer mt-auto py-3 bg-light">
+          <span class="text-muted">Story Catcher 2022</span>
+        </div> -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- <script
+     src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+    </script> -->
+    <!-- <script
+        src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"
+        integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA="
+        crossorigin="anonymous">
+    </script> -->
+
+  <script>
+      const messageDisplay = document.querySelector('.messageDisplay')
+      messageDisplay.style.color = 'blue'
+  </script>

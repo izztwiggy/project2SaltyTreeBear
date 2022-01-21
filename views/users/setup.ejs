@@ -1,0 +1,81 @@
+<div class="container">
+    <h1>Welcome to Story Catcher,</h1>
+    <p class="lead">Let's get you set up!</p>
+</div>
+<div class="container form-control">
+    <form action="/user/update?_method=PUT" method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <label for="userFirstName">What is your First Name?</label>
+            <input class="form-control" type="text" name="name" id="userFirstName">
+        </fieldset>
+        <fieldset>
+            <label for="userEmail">What's your email?</label>
+            <input class="form-control" type="email" name="email" id="userEmail">
+        </fieldset>
+        <fieldset class="mb-3">
+            <label class="form-label" for="profilePicture">Upload Profile Picture</label>
+            <input class="form-control-file"type="file" name="profilePicture" id="profilePicture" accept="image/*" single>
+        </fieldset>
+            <label for="avatar">Choose an Avatar</label>
+            <select name="avatar" id="avatar">
+                <option selected disabled hidden>Select One </option>
+                <option value="/css/avatars/bee_avatar.jpeg">Bee</option>
+                <option value="/css/avatars/butterfly_avatar.jpeg">Lion</option>
+                <option value="/css/avatars/cactus_avatar.jpeg">Cactus</option>
+                <option value="/css/avatars/deer_avatar.jpeg">Deer</option>
+                <option value="/css/avatars/flower_avatar.jpeg">Flower</option>
+                <option value="/css/avatars/fox_avatar.jpeg">Fox</option>
+                <option value="/css/avatars/horse_avatar.jpeg">Horse</option>
+                <option value="/css/avatars/mountainLake_avatar.jpeg">Mountain Lake</option>
+                <option value="/css/avatars/mushroom_avatar.jpeg">Mushrooms</option>
+                <option value="/css/avatars/orangutan_avatar.jpeg">Orangutan</option>
+                <option value="/css/avatars/sparkle_web.jpeg">Spider Web</option>
+                <option value="/css/avatars/tiger_avatar.jpeg">Tiger</option>
+                <option value="/css/avatars/wolf_avatar.jpeg">Wolf</option>
+                <option value="/css/avatars2/airplane_avatar.jpeg">Airplane</option>
+                <option value="/css/avatars2/astronaut_avatar.jpeg">Astronaut</option>
+                <option value="/css/avatars2/explosion_avatar.jpeg">Space Fire Ball</option>
+                <option value="/css/avatars2/ghost_avatar.jpeg">Ghost</option>
+                <option value="/css/avatars2/giddyUp_avatar.jpeg">Yee Haw</option>
+                <option value="/css/avatars2/giraffe_avatar.jpeg">Giraffe</option>
+                <option value="/css/avatars2/happyGuy.jpeg">Happy</option>
+                <option value="/css/avatars2/ladybug.jpeg">LadyBug</option>
+                <option value="/css/avatars2/matchBoxCar_avatar.jpeg">Match Box Car</option>
+                <option value="/css/avatars2/motorcycle_avatar.jpeg">MotorCylce</option>
+                <option value="/css/avatars2/rainbowtings_avatar.jpeg">Magic Rainbow Wall</option>
+            </select>
+        </fieldset>
+        <fieldset>
+            <p id="urgentNote">Come back to edit to place in that they can export their calendar inputs if they would rather just be able to email others the day highlights</p>
+            <!-- Add Partner Check, if so = show add partner -->
+            <label for="partnerEmailCheck">Would You like To add a partner as a linked User?</label>
+            <input type="checkbox" id="partnerEmailCheck">
+<!-- hidden if not selected check box, if so, will generate a random code to send to the partner -->
+            <label class="addPartner hidden" for="partnerEmail">Enter their Email Below and a special Password that they will user to link to the profile. We will send them an email and a special code to Register with to link the profiles. They will have full user access just as you. 
+            <input class="addPartner hidden form-control" type="email" name="partnerEmail" id="partnerEmail">
+        </fieldset>
+
+        <fieldset>
+            <p>We offer <span>Annual Emails</span> containing all the highlights of your Child's year, such as Milestones, Important Notes, Pictures, and stories entered, that is sent on the child's Birthday. (If their Birthday happens to be within the next week we will wait til next year so it has some real meat to it) To Opt-in to these emails, check Below. If you change your mind at any point, come back here and edit to change.</p>
+            <label for="annualEmail"><span>Check To Opt In to Annual Emails</span></label>
+            <input type="checkbox" name="annualEmail" id="annualEmail">
+        </fieldset>
+        <input type="submit" value="Set Profile">
+    </form>
+</div>
+
+<script>
+    const addPartnerInputs = document.querySelectorAll('addPartner')
+    const partnerCheckBox = document.getElementById('partnerEmailCheck')
+
+    partnerCheckBox.addEventListener('change', (e) => {
+        e.preventDefault()
+        addPartnerInputs.forEach(item => {
+            item.classList.toggle('hidden')
+        })
+    })
+    
+
+
+
+</script>

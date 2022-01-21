@@ -1,0 +1,138 @@
+
+<div class="container secondNavBox">
+  <nav class="nav " aria-label="Secondary navigation">
+
+    <a class="nav-link" data-toggle="tab" href="/user/<%=child._id%>/entry/create">New Entry Create Prompt</a>
+    <a class="nav-link" data-toggle="tab" href="/user/<%=child._id%>/entry/prompts">New Entry Select Prompt</a>
+    <a class="nav-link" data-toggle="tab" href="/user/<%= child._id%>/edit">Edit Profile</a>
+    <a class="nav-link" data-toggle="tab" href="#" onclick="submitForm()">Delete Profile</a>
+    <a class="nav-link" data-toggle="tab" href="/user">Back To User Profile</a>
+  </nav>
+</div>
+<div class="container">
+  <form id="deleteForm" class="hidden" action="/user/<%=child._id%>/delete?_method=DELETE" method="POST">
+    <input type="hidden" name="filename" value="<%= child.profilePicture.filename%>">
+    <input class="nav-link deleteSubmit d-block text-end mt-3" type="submit" value="Delete Profile">
+  </form>
+</div>
+<div class="container p-4 p-md-5 mb-4 text-white rounded bg-dark">
+  <div class="row">
+    <div class="col-6 col-md-6">
+      <% if(child.profilePicture.url){ %>
+        <img class="img-fluid showPro" src="<%= child.profilePicture.url%>" alt="child ProfilePicture">
+      <%}else if(child.avatar){%>
+        <img class="img-fluid showPro" src="<%= child.avatar%>" alt="child avatar">
+      <%}else {%>
+        <img class="img-fluid showPro" src="/css/avatars/storyCatcher-logo.png" alt="storycatcher logo">
+      <% } %> 
+    </div>
+    <div class="col-6 col-md-6">
+      <table class="table text-white">
+        <thead>
+          <th>
+            <%=child.firstName%> <%= child.middleName%> <%= child.lastName %> <%= child.suffix%>
+          </th>
+        </thead>
+        <tbody>
+          <% if(child.preferredName){ %>
+            <tr>
+              <td>
+               <span>Goes By</span> <%= child.preferredName %>
+              </td>
+            </tr>   
+            <%}%>
+          <% if(child.nickname){%>
+            <tr>
+              <td><span>Nickname</span> <%=child.nickname%></td>
+            </tr>
+          <%} %>
+          <tr>
+            <td>
+              Born On <%= birthday(child.birthYear,child.birthMonth,child.birthDay)%>
+            </td>
+          </tr>
+          <tr>
+            <% if(child.childEmail){ %>
+              <tr>
+                <td><span>Email Address</span> <%=child.childEmail%></td>
+              </tr>
+           <% } %> 
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-3 col-md-6">
+        <% if(child.preferredName){ %>
+          <h1><%= child.preferredName %>, Age <%= calculateAge(child.birthYear,child.birthMonth,child.birthDay) %></h1>
+        <%} else if(!preferredName){%>
+          <h1><%= child.firstName %>, Age <%= calculateAge(child.birthYear,child.birthMonth,child.birthDay) %></h1>
+        <%}%>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  
+</div>
+<h3>Profile Entries</h3>
+    <% if(years){%>
+      
+      
+        <% for(let [year, entries] of Object.entries(years)){%>
+          <section class="timeline">
+            <h3 class="year"> <%= year %> </h3>
+            <ul>
+              <% entries.forEach(entry => {%>
+                <% if(!entry.calendar){%>
+                  <li>
+                    <div>
+                      <% if(entry.time && entry.time !== 'null'){%>
+                        <p class="blog-post-meta"><%= (entry.time).toDateString() %> </p>
+                        <%} %> 
+                        <h5><span><%= entry.title%></span></h5>
+                        <p>
+                        <% if(entry.body && entry.body.length > 100){%>
+                          <%= entry.body.substring(0,100)+"..."%>
+                          <a href="/user/<%=child._id%>/entry/<%= entry._id%>">Read More</a>
+                        <%}else{%>
+                          <%= entry.body%>
+                          <a href="/user/<%=child._id%>/entry/<%= entry._id%>">View</a>
+                        <%} %>
+                        </p>
+                    </div>
+                  </li>
+                <%} %> 
+              <%})%>
+            </ul>
+          </section>  
+        <%}%>
+      <% }%>
+       
+      
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  const deleteForm = document.getElementById('deleteForm')
+  function submitForm(){
+    deleteForm.submit()
+  }
+</script>

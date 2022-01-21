@@ -1,0 +1,149 @@
+<div class="container">
+    <a class="btn btn-sm btn-outline-success" href="/user/<%= child.id%>/child">Back</a>
+    <div class="container-fluid">
+        <% if(child.profilePicture.url){%>
+            <img src="<%= child.profilePicture.url %>" class="img-fluid" alt="child ProfilePicture">
+        <%}else if(child.avatar){%>
+            <img src="<%= child.avatar %>" class="img-fluid" alt="child ProfilePicture">
+        <%}else{%>
+            <img src="/css/avatars/storyCatcher-logo.png" class="img-fluid" alt="child ProfilePicture">
+        <%}%> 
+        <h3>EDIT CHILD PROFILE</h3>
+        <h4><%= child.preferredName%></h4>
+        <form action="/user/<%= child._id%>/child?_method=PUT" method="POST" enctype="multipart/form-data">
+            <div class="childAddForm">
+<!-- Edit the current Profile Picture -->
+                <% if(child.profilePicture.url){%>
+                    <fieldset class="deleteCurrent">
+                        <label for="deleteCurrent">Edit Current Profile Picture</label>
+                        <input class="deleteCheck" type="checkbox" value="<%= child.profilePicture.filename%>" name="deleteCurrent" id="deleteCurrent">
+                    </fieldset>
+                    <fieldset class="newPicField hidden">
+                        <label class="form-label" for="profilePicture">Upload Picture</label>
+                        <input class="form-control-file"type="file" name="profilePicture" id="profilePicture" accept="image/*" single>
+                    </fieldset>
+                <%}else {%>
+                    <fieldset class="mb-3">
+                        <label class="form-label" for="profilePicture">Upload Profile Picture</label>
+                        <input class="form-control-file"type="file" name="profilePicture" id="profilePicture" accept="image/*" single>
+                    </fieldset>
+                <%} %>  
+                
+                <!-- <div class="container-pic">
+                    <div class="showAv"></div>
+                </div> -->
+                <fieldset class="avatarField">
+                    <label for="avatarChoice">Change Avatar <div class="showAv"></div> </label>
+                    <select name="avatar" class="avSelect" id="avatars">
+                        <option selected disabled hidden>Select One </option>
+                        <option value="/css/avatars/bee_avatar.jpeg">Bee</option>
+                        <option value="/css/avatars/butterfly_avatar.jpeg">Lion</option>
+                        <option value="/css/avatars/cactus_avatar.jpeg">Cactus</option>
+                        <option value="/css/avatars/deer_avatar.jpeg">Deer</option>
+                        <option value="/css/avatars/flower_avatar.jpeg">Flower</option>
+                        <option value="/css/avatars/fox_avatar.jpeg">Fox</option>
+                        <option value="/css/avatars/horse_avatar.jpeg">Horse</option>
+                        <option value="/css/avatars/mountainLake_avatar.jpeg">Mountain Lake</option>
+                        <option value="/css/avatars/mushroom_avatar.jpeg">Mushrooms</option>
+                        <option value="/css/avatars/orangutan_avatar.jpeg">Orangutan</option>
+                        <option value="/css/avatars/sparkle_web.jpeg">Spider Web</option>
+                        <option value="/css/avatars/tiger_avatar.jpeg">Tiger</option>
+                        <option value="/css/avatars/wolf_avatar.jpeg">Wolf</option>
+                        <option value="/css/avatars2/airplane_avatar.jpeg">Airplane</option>
+                        <option value="/css/avatars2/astronaut_avatar.jpeg">Astronaut</option>
+                        <option value="/css/avatars2/explosion_avatar.jpeg">Space Fire Ball</option>
+                        <option value="/css/avatars2/ghost_avatar.jpeg">Ghost</option>
+                        <option value="/css/avatars2/giddyUp_avatar.jpeg">Yee Haw</option>
+                        <option value="/css/avatars2/giraffe_avatar.jpeg">Giraffe</option>
+                        <option value="/css/avatars2/happyGuy.jpeg">Happy</option>
+                        <option value="/css/avatars2/ladybug.jpeg">LadyBug</option>
+                        <option value="/css/avatars2/matchBoxCar_avatar.jpeg">Match Box Car</option>
+                        <option value="/css/avatars2/motorcycle_avatar.jpeg">MotorCylce</option>
+                        <option value="/css/avatars2/rainbowtings_avatar.jpeg">Magic Rainbow Wall</option>
+                    </select>
+                </fieldset>
+<!-- Name -->
+                <fieldset>
+                    <label for="childFirstName">First name</label>
+                    <input class="form-control" type="text" id="firstName" name="firstName" value="<%= child.firstName%>">
+       
+                    <label for="middleName">Middle name</label>
+                    <input class="form-control" type="text" id="middleName" name="middleName" value="<%= child.middleName%>">
+     
+                    <label for="childLastName">Last name</label>
+                    <input class="form-control" type="text" id="lastName" name="lastName" value="<%= child.lastName%>">
+  
+                    <label for="childSuffix">Suffix</label>
+                    <input class="form-control" type="text" id="childSuffix" name="suffix"  value="<%= child.suffix%>">
+                </fieldset>
+<!-- Name Preferrence -->
+                <fieldset>
+                    <label for="childnickname">Nickname</label>
+                    <input class="form-control" type="text" id="nickname" name="nickname" value="<%= child.nickname%>">
+
+                    <label for="preferredName">Preferred Name</label>
+                    <input type="text" class="form-control" name="preferredName" value="<%= child.preferredName%>">
+                </fieldset>
+<!-- Birthday -->
+                <fieldset>
+                    <!-- <label for="birthDate">Birth Date</label>
+                    <input class="form-control" type="date" name="birthdate" id="birthdate"> -->
+
+                    <div class="input-group">
+                        <span class="input-group-text">Date of Birth</span>
+                        <input class="form-control" type="number" aria-label="month MM" id="birthDate" class="form-control" name="birthMonth" min="1" max="12" step="1" value="<%= child.birthMonth%>">
+                        <input class="form-control" type="number" id="birthDate" name="birthDay" min="1" max="31" step="1"value="<%= child.birthDay%>">
+                        <input class="form-control" type="number" id="birthDate" name="birthYear" min=<%= numberYears() - 100 %> max="<%= numberYears() + 20 %>" step="1" value="<%= child.birthYear%>" >
+                    </div>
+                </fieldset>
+<!-- Email -->
+            <% if(child.childEmail){ %>
+                    <fieldset>
+                        <label for="childEmail">Child's Email</label>
+                        <input class="form-control" type="email" id="childEmail" name="childEmail" value="<%= child.childEmail%>">
+                    </fieldset>
+            <% } else {%>
+                <fieldset>
+                    <label for="checkBox">Add Email For Child</label>
+                    <input type="checkbox" class="addEmail" id="checkBox">
+                </fieldset> 
+                <fieldset class="inputEmail hidden">
+                    <label for="childEmail">Child's Email</label>
+                    <input class="form-control" type="email" id="childEmail" name="childEmail" placeholder="child@email.com">
+                </fieldset>
+
+            <%} %> 
+<!-- Submit -->
+            <fieldset>
+                <label for="submitBtn"></label>
+                <input class="form-control" type="submit" class="btn" value="Post Updates">
+            </fieldset>
+        </form>
+    </div>           
+</div>
+
+<script>
+    // New Profile Picture
+    const newProfilePic = document.querySelector('.newPicField')
+    const deleteChex = document.querySelector('.deleteCheck')
+    deleteChex.addEventListener('change', (e) => {
+        e.preventDefault()
+        newProfilePic.classList.toggle('hidden')
+    })
+
+    //Show The Avatar Img
+    const selectAvatar = document.querySelector('.avSelect')
+    const showAvatarDiv = document.querySelector('.showAv')
+    selectAvatar.addEventListener('change', (e) => {
+        e.preventDefault()
+        showAvatarDiv.innerHTML = (`<img class="img-fluid rounded float-end" src="${e.target.value}" alt="avatart(like a poptart but cute avatar) pic">`)
+    })
+
+    //Show email input or Check Box
+    const addEmailCheck = document.querySelector('.addEmail')
+    const addEmailField = document.querySelector('.inputEmail')
+    addEmailCheck.addEventListener('click', (e) => {
+        e.preventDefault()
+        addEmailField.classList.toggle('hidden')
+    })
+</script>

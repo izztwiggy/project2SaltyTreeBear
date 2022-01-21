@@ -1,0 +1,66 @@
+<!-- ADD A Profile Entry -->
+<a href="/user/<%=child._id%>/child">Back to Child Profile</a>
+<a href="/user/<%=child._id%>/entry/create">Create My Own Prompt</a>
+
+ <!-- Select an Option Prompt -->
+<form action="/user/<%= child.id %>/entry" method="post">
+    <fieldset>
+        <label for="promptSelection">Choose An Prompt</label>
+        <select class="form-control" name="title" id="promptSelection">
+            <option selected disabled hidden>Select Prompt Here</option>
+            <option value="Favorite Color">Favorite Color</option>
+            <option value="Favorite Animal or Creature">Favorite Animal or Creature</option>
+            <option value="A Signifigant Friendship">A Signifigant Friendship</option>
+            <option value="Favorite Food">Favorite Food</option>
+            <option value="A big Emotions time happens when ...">A big Emotions time happens when ...</option>
+
+            <option value="What do you want your child to know about their life right now?">What do you want your child to know about their life right now?</option>
+            <option value="Favorite song?">Favorite song?</option>
+            <option value="Their favorite book?">Their favorite book?</option>
+            <option value="Favorite Place to go to?">Favorite Place to go to?</option>
+            <option value="What is one thing about today that you never want to forget about Your Child?">What is one thing about today that you never want to forget about Your Child?</option>
+
+            <option value="Birth Story">Birth Story</option>
+            <option value="Adoption Story">Adoption Story</option>
+            <option value="Foster Story">Foster Story</option>
+            <option value="Family Tree">Family Tree</option>
+            <option value="I want them to Know ...">I want them to Know ...</option>
+        </select>
+    </fieldset>
+    <fieldset>
+        <label for="response">Answer</label>
+        <textarea class="form-control" name="body" id="response" cols="30" rows="10"></textarea>
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="Add Entry">
+    </fieldset>
+</form>
+
+
+
+
+
+<!-- <fieldset>
+    <h6 class="addToProfile"><span>Add a Note About Your Child Here</span></h6>
+    <p>Leave a note or a letter from you To them, add their Favorite Color, or favorite food. Fill this however you want or need. Choose from our Prompts below, or create your own! We want to be here as an assitance for you and not to add more to your plate. So fill this out just one prompt at a time, happy writing!</p>
+    <div>
+    <button class="btn btn-secondary entryBtn" id="create">Create Own Prompt</button>
+    <button class="btn btn-secondary entryBtn" id="prompt">Browse Our Prompts</button>
+</fieldset> -->
+<!-- <script>
+    const createPrompt = document.querySelector('.created')
+    const createPromptBtn = document.querySelector('#create')
+    createPromptBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        promptSelect.classList.toggle('hidden')
+        createPrompt.classList.toggle('hidden')
+    })
+
+    const promptSelect = document.querySelector('.prompted')
+    const choosePromptBtn = document.querySelector('#prompt')
+    choosePromptBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        createPrompt.classList.toggle('hidden')
+        promptSelect.classList.toggle('hidden')
+    })
+</script> -->

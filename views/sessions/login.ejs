@@ -1,0 +1,43 @@
+<!-- <div class="container-fluid">
+    <h1 class="form-heading">Login</h1>
+    <form action="/session/login" method="POST">
+        <fieldset>
+            <label for="username">Username:</label>
+            <input class="form-control" type="text" name="username" id="username">
+        </fieldset>
+        <fieldset>
+            <label for="password">Password:</label>
+            <input class="form-control" type="password" name="password" name="password">
+        </fieldset>
+        <input class="form-control btn btn-dark" type="submit" value="Register">
+    </form> 
+</div> -->
+
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content rounded-5 shadow">
+     
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h2 class="fw-bold mb-0">Welcome Back!</h2>
+                <a href="/session"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
+            </div>
+
+            <div class="modal-body p-5 pt-0">
+                <form action="/session/login" method="POST">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-4" name="username" id="floatingInput">
+                        <label for="floatingInput">Username</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control rounded-4" id="floatingPassword" name="password" placeholder="Password">
+                        <label for="floatingPassword">Password</label>
+                    </div>
+                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Sign In</button>
+                    <hr class="my-4">
+                    <h2 class="fs-5 fw-bold mb-3">Not Yet a Member?</h2>
+                </form>
+                <a href="/session/register"><button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4">Sign Up</button></a>
+            </div>
+        </div>
+    </div>  
+</div>

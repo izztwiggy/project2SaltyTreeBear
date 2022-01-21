@@ -1,0 +1,112 @@
+<div class="container-fluid p-4 p-md-5 mg-2 mb-4 text-white rounded bg-dark">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-4 fst-italic">Welcome <%= user.name%></h1>
+            <p class="lead my-3">View, edit, and add acess your Child's profile Here</p>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-sm btn-outline-secondary text-white showUserInfo">Show User Info</button>
+                </div>
+                <div class="col">
+                    <a class="btn btn-sm text-white btn-outline-secondary " href="/user/edit">Edit User</a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-sm text-white btn-outline-secondary" href="/user/child/new">New Child Profile</a>
+                </div>
+            </div>
+          <%if(children){%>
+            <div class="row childInfo">
+                <div class="col">
+                    <table class="table lead my-3 text-white ">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Age </th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <% children.forEach(child => {%>
+                            <tr>
+                                <td>
+                                    <% if(!child.preferredName){ %>
+                                        <%= child.firstName%>
+                                      <%} else{%>
+                                        <%= child.preferredName%>
+                                      <%}%>
+                                </td>
+                                <td>
+                                    <%= calculateAge(child.birthYear,child.birthMonth,child.birthDay) %> 
+                                </td>
+                                <td>
+                                    <a class="link-secondary"href="/user/<%= child._id%>/child" aria-label="Search">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
+                                    </a>
+                                </td>
+                            </tr>
+                           <%}) %> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          <%} %> 
+            <div class="userInfo hidden row">
+                <table class="table lead my-3 text-white">
+                    <thead>
+                        <tr>
+                            <th>User Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><%= user.name %></td>
+                        </tr>
+                        <tr>
+                            <td><%= user.username %></td>
+                        </tr>
+                        <tr>
+                            <td><%= user.email %></td>
+                        </tr>
+                        <tr>
+                    <% if(user.annualEmail){%>
+                            <td><span>Subscribed To Annual Emails?</span> True</td>
+                            </tr>
+                    <%} else {%>
+                            <td><span>Subscribed To Annual Emails?</span> Not Subscribed</td>
+                        </tr>
+                    <%}%>
+                    <% if(user.partnerEmail){%>
+                        <tr>
+                            <td><span>Partner Email</span> <%= user.partnerEmail %></td>
+                        </tr>                   
+                    <% } %> 
+                    </tbody>
+                </table>
+            </div>
+    </div>
+        <div class="col userProfilePic">
+          <%if(user.profilePicture.url){ %>
+            <img class="img-fluid showPro" src="<%= user.profilePicture.url%>" alt="user Profile Picture" >
+          <%}else if(!user.profilePicture && user.avatar) {%>
+            <img class="img-fluid showPro" src="<%= user.avatar%>" alt="user avatar">
+          <%}else {%>
+            <img class="img-fluid showPro" src="/css/avatars/storyCatcher-logo.png" alt="storycatcher logo">
+          <% } %> 
+        </div>
+    </div>
+</div>
+
+<script>
+    const userInfo = document.querySelector('.userInfo')
+    const showUserBtn = document.querySelector('.showUserInfo')
+
+    showUserBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        userInfo.classList.toggle('hidden')
+        if(showUserBtn.innerHTML === 'Show User Info'){
+            showUserBtn.innerHTML = 'Close User Info'
+        } else {
+            showUserBtn.innerHTML = 'Show User Info'
+        }
+    })
+</script>

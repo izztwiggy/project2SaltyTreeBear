@@ -1,0 +1,33 @@
+<div class="container-writeHeader">
+    <div class="col-4 d-flex justify-content-end align-items-center">
+        <a class="btn btn-sm btn-outline-secondary" href="/books/bookshelf/<%= book._id%>/view">Back</a>
+        <a class="btn btn-sm btn-outline-secondary" href="/books/bookshelf/new">Write A New Story</a>
+    </div>
+</div>
+
+
+<div class="container">
+    <h1>Edit</h1>
+    <form action="/books/bookshelf/<%= book._id%>?_method=PUT" method="POST">
+        <fieldset>
+            <label for="author">Author</label>
+            <input class="form-control" type="text" id="author" name="author" value="<%= book.author%>">
+        </fieldset>
+        <fieldset>
+            <label for="cover">Cover Color</label>
+            <input type="color" name="cover" value="<%= book.cover%>"id="cover">
+        </fieldset>
+        <fieldset>
+            <label for="title">Title</label>
+            <input class="form-control" type="text" id="title" name="title" value="<%= book.title%>">
+        </fieldset>
+        <fieldset>
+            <label for="story"></label>
+            <textarea name="story" id="story" class="form-control textBoxStory" cols="50" rows="25"><%= book.story%></textarea>
+        </fieldset>
+        <fieldset>
+            <input type="submit" class="form-control btn-primary" value="Submit">
+        </fieldset>
+    </form>
+</div>
+

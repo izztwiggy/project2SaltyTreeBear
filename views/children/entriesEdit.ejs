@@ -1,0 +1,18 @@
+<!-- Edit Entry -->
+<form action="/user/<%=child._id%>/entry/<%= entry._id%>?_method=PUT" method="post">
+    <fieldset>
+        <label for="date">Date</label>
+        <input class="form-control" type="date" name="date" id="date" value="<%= entry.date%>">
+    </fieldset>
+    <fieldset>
+        <label for="prompt">Edit Prompt</label>
+        <input class="form-control"  type="text" name="title" id="prompt" value="<%= entry.title%>">
+    </fieldset>
+    <fieldset>
+        <label for="response">Edit Response</label>
+        <textarea class="form-control"  name="body" id="response" cols="30" rows="10"><%= entry.body%></textarea>
+    </fieldset>
+    <fieldset>
+        <input type="submit" class="btn btn-primary form-control" value="Submit">
+    </fieldset>
+</form>

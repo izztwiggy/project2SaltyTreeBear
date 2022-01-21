@@ -1,0 +1,222 @@
+<div class="calendar-container">
+    <div id="calendar-head">
+        <p class="calBtn btn" id="prevMonth">Prev Month</p>
+        <p class="title" id="displayMonth"></p>
+        <p class="calBtn btn" id="nextMonth"> Next Month</p>
+    </div>
+    <div id="calendar"></div>
+</div>
+
+<script>
+        const calendar = document.getElementById('calendar')
+        const calHead = document.getElementById('calendar-head')
+        const backBtn = document.getElementById('prevMonth')
+        const forwardBtn = document.getElementById('nextMonth')
+        const monthTitle = document.getElementById('displayMonth')
+
+    class Calendar {
+        constructor(startDate, currentMonth, currentYear){
+            this.startDate = startDate,
+            this.currentMonth = currentMonth,
+            this.currentYear = currentYear
+        }
+        isLeap(year){
+            if(year % 4 === 0 && year % 100 !== 0){
+            return true
+            } else if(year % 4 === 0 && year % 100 === 0){
+                if(year % 400 !== 0){
+                    return false
+                } else {
+                    return true
+                }
+            } else {
+                return false
+            }
+        }
+        febDays(year){
+            if(this.isLeap(year)){
+                return 29
+            } else {
+                return 28
+            }
+        }
+        movingForward(year, month){
+            this.currentYear = month < 11 ? year : year + 1
+            this.currentMonth = year > this.currentYear ? 0 : month + 1
+            return this.currentYear, this.currentMonth
+        }
+        goingBackwards(year, month){
+            this.currentYear = month < 1 ? year - 1 : year
+            this.currentMonth = year > this.currentYear ? 11 : month - 1
+            return this.currentYear, this.currentMonth
+        }
+    }
+
+    const now = new Date()
+    const showCalendar = new Calendar(
+        now,
+        now.getMonth(),
+        now.getFullYear()
+    )
+  
+    const months = [
+        {name: 'January', days: 31},
+        {name: 'February', days:(showCalendar.febDays(showCalendar.currentYear))},
+        {name: 'March', days: 31}, 
+        {name: 'April', days: 30}, 
+        {name: 'May', days: 31}, 
+        {name: 'June', days: 30}, 
+        {name:'July',days: 31}, 
+        {name:'August', days: 31}, 
+        {name:'September', days: 30}, 
+        {name:'October', days: 31}, 
+        {name: 'November', days: 30}, 
+        {name: 'December', days: 31}
+    ]
+    
+    const dayNames = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    const daysAbrv = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    
+    monthTitle.innerHTML = (`${months[showCalendar.currentMonth].name} ${showCalendar.currentYear}`)
+    
+    function firstWeekDay(month, year){
+        let theFirstOfMonth = new Date(year, month, 1)
+        let numberFirst = theFirstOfMonth.getDay()
+        let theDaysIn = months[month].days
+        const calzone = {
+            daysInMonth: theDaysIn,
+            firstDay: numberFirst,
+        }
+        return calzone
+    }
+    console.log(firstWeekDay(showCalendar.currentMonth, showCalendar.currentYear).firstDay)
+
+
+    //jan 2022: Sat Jan 01 2022 00:00:00 GMT-0800 (Pacific Standard Time) -> 6
+    // firstWeekDay(showCalendar.currentMonth, showCalendar.currentYear)
+
+    function getPrevMonthDates(month, startDate){
+        let prevMonth = month > 0 ? month -1 : 11
+        let prevMonthTotalDays = months[prevMonth].days
+        let getDaysFrom = prevMonthTotalDays - startDate
+        const days = []
+        for(let i = getDaysFrom; i<= prevMonthTotalDays; i++){
+            days.push(i)
+        }
+        // console.log(prevMonth)
+        // console.log(months[prevMonth].days)
+        // console.log(days)
+        return days
+    }
+    getPrevMonthDates(showCalendar.currentMonth, firstWeekDay(showCalendar.currentMonth, showCalendar.currentYear).firstDay)
+
+
+    function getNextMonthDates(month){
+        let nextMonth = month < 11 ? month + 1 : 0
+        console.log(months[nextMonth].name)
+        return nextMonth
+    }
+    // getNextMonthDates(showCalendar.currentMonth)
+
+    function createCalendar(month, year){
+        let getCalZone = firstWeekDay(month, year)
+    }
+    // console.log(showCalendar.febDays(showCalendar.currentYear))
+    // console.log(showCalendar.movingForward(showCalendar.currentYear, showCalendar.currentMonth))
+    // console.log(showCalendar.currentMonth, showCalendar.currentYear)
+    // console.log(showCalendar.goingBackwards(showCalendar.currentYear, showCalendar.currentMonth))
+    // console.log(showCalendar.goingBackwards(showCalendar.currentYear, showCalendar.currentMonth))
+    // console.log(showCalendar.goingBackwards(showCalendar.currentYear, showCalendar.currentMonth))
+    // console.log(showCalendar)
+
+</script>
+
+    <!-- // console.log(calendarObj)
+    //go backwards, first, if the month is at 0 then the year is equal to the passed in year -1 
+    //if the year is less than the passed in year that means the month was at 0 so we need to go to decemeber (11), if year is equal we need to subtract one from the month 
+    //set the date in the state obj
+   
+
+    //similar logic to go backwards, if the month entered is 11 then we need to set the year to + 1 (since it was at december)
+    //then if the year is greater than the passed in year that means the month was at 11 so we need to set it to january (or 0)
+    //set the date in the state obj
+    
+
+    //when making dates, check to see if that year is a leap, for creating feb
+    //if false days = 28
+    //if true days = 29
+    
+
+    // console.log(calendarObj.febDaysTotal(2024))
+
+    //get the current month
+    // const current = new Date()
+    // const currMonth = months[current.getMonth()]
+    // const amountDays = totalDays[current.getMonth()]
+    //get total days
+
+    // console.log(current.toDateString('en-us'))
+    // console.log(currMonth)
+    // console.log(amountDays)
+    // console.log(calendarObj.leapYearCheck(current.getFullYear()))
+    
+    // const table = document.createElement('table')
+    
+    // const createCalendar = () => {
+    //     for(let w = 0; w < 6; w ++){
+    //         for(let d = 0; d < 7; d++){
+                
+    //         }
+    //     }
+    // }
+//    function addTable(){
+//         for(let i = 0; i<6; i++){
+//             for(let j = 0; j < 7; j++){
+//                 let row = document.createElement('tr')
+//                 let dayCell = document.createElement('td')
+//                 dayCell.innerHTML = (`<p>${i}${j}</p>`)
+//                 row.appendChild(dayCell)
+//             }
+//             table.appendChild(row)
+//         }
+//         calendar.append(table)
+//    }
+
+
+
+    //generate a 42 cell holder
+    //get a starting SHOW date - CURRENT
+    //the start of the calendar will be equal to Jan of the year of the childs birth
+
+
+    //the month to start on will always be the current month
+    //find the day of the week that the 1st of the month is on
+    //the calendar will go sun -> saturday, so 7, 1, 2, 3, 4, 5, 6
+    //if the 1st is on sunday start and go for current is as is
+    //if the 1st of the month is anything else, find the previous month, and take the amount of days at end of month equivilant to the day of week number for 1st of current month 
+
+    //then we need to find the last day of the month: and whatever that difference is, count up from 1 -> end of 42 cell
+    //calculate that by: total days of month + the number of the starting day of the week(unless 7) and get the difference from 42
+
+    //to get the years: 
+    //since months is on a 0 index basis,  if hits back button find the current month #, if get's to 0, find the current year, then set the date to be december of the this.year - 1. Year is now eqal to year that is
+
+    //if hits forward button and finds themselves at decemeber of that year, the next month will be Januray this.year +1, this.year now equals the year that is.
+ -->
+
+
+
+
+<!-- // function movingForward(currentYear, month){
+    //     let year = month <= 11 ? currentYear : currentYear + 1
+    //     let curremtMonth = year > currentYear ? 0 : month + 1
+    //     calendarObj.year = year
+    //     calendarObj.month = month
+    // }
+
+    // function goingBackwards(currentYear, currentMonth){
+    //     let year = currentMonth < 1 ? currentYear - 1 : currentYear
+    //     let month = year < currentYear ? 11 : currentMonth - 1
+    //     calendarObj.year = year
+    //     calendarObj.month = month 
+    // } -->

@@ -1,0 +1,35 @@
+<div id="app-calendar" class="container calendar"></div>
+<div class="container sticky">
+    <div class="calendar-sticky">
+        <h5 id="dayName"></h5>
+        <h5 id="monthName"></h5>
+        <h5 id="dayNumber"></h5>
+        <h5 id="year"></h5>
+    </div>
+</div>
+<script>
+
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November']
+    let date = new Date()
+    let day = date.getDate()
+    let dayOfWeek = date.toLocaleString('en-us', {weekday: 'long'})
+    let displayMonth = date.toLocaleString('en-us', {month: 'long'})
+    let year = date.getFullYear()
+    const calendar = document.getElementById('app-calendar')
+
+    const stickyMonth = document.getElementById('monthName')
+    const stickyDayName = document.getElementById('dayName')
+    const stickyDayNum = document.getElementById('dayNumber')
+    const stickyYear = document.getElementById('year')
+
+    stickyMonth.innerHTML = displayMonth
+    stickyDayName.innerHTML = dayOfWeek
+    stickyDayNum.innerHTML = day
+    stickyYear.innerHTML = year
+   
+
+    //console.log(month,displayMonth, day, dayOfWeek, displayDay, year)
+    console.log(`Today is ${displayDay} ${displayMonth} ${day} ${year}`)
+    
+</script>
